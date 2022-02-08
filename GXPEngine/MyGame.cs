@@ -8,11 +8,11 @@ public class MyGame : Game
 	UI ui;
 
     public string currentMapName = "maps/Main Menu.tmx";
-    //public string currentMapName = "maps/Factory.tmx";
-    //public string currentMapName = "maps/Nature.tmx";
+
     bool levelLoad = false;
 
-	public MyGame() : base(200, 150, false, false, 800, 600, true)		// Create a window that's 800x600 and NOT fullscreen
+	//public MyGame() : base(200, 150, true, true, 1440, 1080, true)		// Create a window that's 1440x1080 and fullscreen
+	public MyGame() : base(200,150, false, false, 800, 600, true)		// Create a window that's 800x600 and NOT fullscreen
 	{
 		createLevel(currentMapName);
 		Console.WriteLine("MyGame initialized");
@@ -57,6 +57,7 @@ public class MyGame : Game
 
 		//set the index of the ui to be in front of the level
 		this.SetChildIndex(ui, 1);
+		AddChild(new Cursor());
 	}
 
 	/// <summary>

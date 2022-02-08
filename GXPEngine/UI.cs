@@ -5,6 +5,10 @@ using System.Text;
 using GXPEngine;
 
 //UI is an easyDraw to enable screenFading
+/// <summary>
+/// Container for all elements that should stick to the screen regardless of scene movement.
+/// e.g. health bar, coin count, etc.
+/// </summary>
 class UI : EasyDraw
 {
     public Dictionary<String, GameObject> elements; // a way for other parts to easily search for UI elements based on their given name

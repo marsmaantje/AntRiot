@@ -32,11 +32,13 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation\Tween.cs" />
+    <Compile Include="Cursor.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
@@ -95,6 +97,8 @@
     <Compile Include="Objects\Ladder.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scene.cs" />
+    <Compile Include="Scripts\BaseScript.cs" />
+    <Compile Include="Scripts\TestScript.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="UIElements\Button.cs" />
     <Compile Include="UIElements\EnergyBar.cs" />
