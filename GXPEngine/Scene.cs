@@ -13,7 +13,6 @@ class Scene : Pivot
 {
     public Player player;
     TiledObject playerObj;
-    public Checkpoint currentCheckpoint;
     TiledLoader parser;
     public UI ui;
 
@@ -178,45 +177,6 @@ class Scene : Pivot
             AddChild(player);
             player.SetXY(obj.X, obj.Y);
             player.initialize(this);
-        }
-    }
-
-    /// <summary>
-    /// Set the checkpoint of the player to the given checkpoint
-    /// </summary>
-    /// <param name="point">Checkpoint to set</param>
-    public void setCheckpoint(Checkpoint point)
-    {
-        if (currentCheckpoint != point)
-        {
-            currentCheckpoint = point;
-        }
-    }
-
-    /// <summary>
-    /// Respawns the player at the currentCheckpoint or reloads the level if none available
-    /// </summary>
-    public void respawn()
-    {
-        if (currentCheckpoint == null)
-        {
-            ((MyGame)game).loadNewLevel(((MyGame)game).currentMapName); //reload the level from the game
-        }
-        else
-        {
-            //create a new player at the current checkpoint, and call respawn on all CustomObjects
-            player.Destroy();
-            player = new Player(playerObj);
-            AddChild(player);
-            player.SetXY(currentCheckpoint.x, currentCheckpoint.y);
-            player.initialize(this);
-            player.Move(-currentCheckpoint.width, 0);
-
-            CustomObject[] objects = FindObjectsOfType<CustomObject>();
-            foreach (CustomObject obj in objects)
-            {
-                obj.respawn();
-            }
         }
     }
 }

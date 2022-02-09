@@ -82,6 +82,7 @@ class Player : EasyDraw
         lookTarget.SetXY(0, 0);
         lookTarget.SetScaleXY(0.5f, 0.5f);
         parentScene.setLookTarget(lookTarget);
+        parentScene.jumpToTarget();
     }
 
     /// <summary>

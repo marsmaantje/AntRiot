@@ -33,6 +33,7 @@ namespace Scripts
         {
             base.initialize(parentScene);
             Console.WriteLine("ControllerScript initialized");
+            this.visible = false;
 
 
         }

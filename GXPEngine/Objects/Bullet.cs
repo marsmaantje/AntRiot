@@ -5,6 +5,7 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 using TiledMapParser;
+using Objects.Enemies;
 
 namespace Objects
 {
@@ -34,12 +35,30 @@ namespace Objects
             //move the bullet
             Move(0, speed * Time.deltaTime / 1000f);
 
+            //do collision check with enemy
+            checkCollisions();
+
             //if too far away, delete
-            Vector2 currentPos = new Vector2(x, y);
-            if(Vector2.Distance(startPoint, currentPos) > (Mathf.Max(game.width, game.height)))
+            Vector2 globalPosition = TransformPoint(0, 0);
+            float extraDistance = new Vector2(width, height).length();
+            bool outsideX = globalPosition.x < -extraDistance || globalPosition.x > game.width + extraDistance;
+            bool outsideY = globalPosition.y < -extraDistance || globalPosition.y > game.height + extraDistance;
+            if(outsideX || outsideY)
             {
                 this.LateDestroy();
                 Console.WriteLine("bullet destroyed at X:" + x + " Y:" + y);
+            }
+        }
+
+        void checkCollisions()
+        {
+            GameObject[] objects = GetCollisions();
+            foreach (GameObject other in objects)
+            {
+                if(other is Enemy)
+                {
+
+                }
             }
         }
 

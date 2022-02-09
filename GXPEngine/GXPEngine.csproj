@@ -87,6 +87,7 @@
     <Compile Include="Objects\Battery.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Objects\CustomObject.cs" />
+    <Compile Include="Objects\Enemies\Enemy.cs" />
     <Compile Include="Objects\Sign.cs" />
     <Compile Include="Objects\CameraTrigger.cs" />
     <Compile Include="Player.cs" />
@@ -100,7 +101,5 @@
     <Compile Include="UIElements\ExitButton.cs" />
     <Compile Include="UIElements\PlayButton.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Objects\Enemies\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
