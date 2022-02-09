@@ -75,6 +75,13 @@ class Player : EasyDraw
         createAnimation();
         this.x += animation.width / 2; //offset for the tiled player position/origin
 
+
+        this.SetScaleXY(2, 2);
+        Pivot lookTarget = new Pivot();
+        AddChild(lookTarget);
+        lookTarget.SetXY(0, 0);
+        lookTarget.SetScaleXY(0.5f, 0.5f);
+        parentScene.setLookTarget(lookTarget);
     }
 
     /// <summary>
@@ -112,7 +119,7 @@ class Player : EasyDraw
         if(controller.shootButtonDown)
         {
             //spawn bullet
-            Bullet bullet = new Bullet("sprites/Battery.png", 1, 1, 1, 50);
+            Bullet bullet = new Bullet("sprites/Battery.png", 1, 1, 1, 70);
             bullet.SetOrigin(bullet.width / 2, bullet.height);
             parentScene.AddChild(bullet);
             bullet.SetXY(this.x, this.y);

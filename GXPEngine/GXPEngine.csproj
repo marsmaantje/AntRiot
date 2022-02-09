@@ -86,16 +86,9 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Objects\Battery.cs" />
     <Compile Include="Objects\Bullet.cs" />
-    <Compile Include="Objects\Checkpoint.cs" />
     <Compile Include="Objects\CustomObject.cs" />
-    <Compile Include="Objects\DeathTrigger.cs" />
-    <Compile Include="Objects\Platform.cs" />
-    <Compile Include="Objects\LevelDoor.cs" />
     <Compile Include="Objects\Sign.cs" />
-    <Compile Include="Objects\Door.cs" />
-    <Compile Include="Objects\Button.cs" />
     <Compile Include="Objects\CameraTrigger.cs" />
-    <Compile Include="Objects\Ladder.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Scripts\Script.cs" />
