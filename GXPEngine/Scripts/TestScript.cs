@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using Objects;
 using TiledMapParser;
+using GXPEngine;
+using Objects.Enemies;
 
 namespace Scripts
 {
     class TestScript : Script
     {
-        SerialPort controller;
+        int lastSpawnTime = 0;
+        const int spawnInterval = 2000;
+        Random rand = new Random();
 
         public TestScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
@@ -20,33 +24,19 @@ namespace Scripts
         public override void initialize(Scene parentScene)
         {
             base.initialize(parentScene);
-            Console.WriteLine("testScript initialized");
-
-            // Get a list of serial port names.
-            string[] ports = SerialPort.GetPortNames();
-
-            Console.WriteLine("The following serial ports were found:");
-
-            // Display each port name to the console.
-            foreach (string port in ports)
-            {
-                Console.WriteLine(port);
-            }
-
-            if (ports.Length > 0)
-            {
-                controller = new SerialPort(ports[0]);
-                controller.Open();
-            }
+            Console.WriteLine("testScript started");
         }
 
         public void Update()
         {
-            //if there is a controller, read the serial data
-            if(controller != null)
+            if(Time.time > lastSpawnTime + spawnInterval)
             {
-                string input = controller.ReadExisting();
-                Console.WriteLine(input);
+                lastSpawnTime = Time.time;
+                float angle = (float)(rand.NextDouble() * 360);
+                Console.WriteLine("spawning bug at " + angle);
+                ApproachingEnemy enemy = new ApproachingEnemy("sprites/bug3.png", 1, 1, 1, angle);
+                parentScene.AddChild(enemy);
+                enemy.initialize(parentScene);
             }
         }
     }

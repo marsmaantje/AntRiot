@@ -95,6 +95,7 @@ class Player : EasyDraw
 
     void Update()
     {
+        playerInput();
         playerAnimation();
         updateUI();
 
@@ -107,17 +108,31 @@ class Player : EasyDraw
     /// </summary>
     private void playerAnimation()
     {
-        movePlayer();
+
     }
 
-    private void movePlayer()
+    private void playerInput()
     {
-        float rotationDelta = animation.rotation - controller.stickPosition * 360 / 1024;
+        float rotationDelta = animation.rotation - controller.stickPosition;
+        
+        if(rotationDelta > 180)
+        {
+            rotationDelta = animation.rotation - controller.stickPosition - 360;
+
+        }
+        else if (rotationDelta < -180)
+        {
+            rotationDelta = animation.rotation - controller.stickPosition + 360;
+
+        }
+        
         animation.rotation -= rotationDelta * Time.deltaTime / 1000f * 10;
-        animation.rotation %= 360;
+        animation.rotation -= Mathf.Floor(animation.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
+        
 
         //if you want to shoot
-        if(controller.shootButtonDown)
+        //if(controller.shootButtonDown)
+        if(Input.GetKeyDown(Key.SPACE))
         {
             //spawn bullet
             Bullet bullet = new Bullet("sprites/Battery.png", 1, 1, 1, 70);

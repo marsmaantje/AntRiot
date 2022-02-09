@@ -84,9 +84,9 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
-    <Compile Include="Objects\Battery.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Objects\CustomObject.cs" />
+    <Compile Include="Objects\Enemies\ApproachingEnemy.cs" />
     <Compile Include="Objects\Enemies\Enemy.cs" />
     <Compile Include="Objects\Sign.cs" />
     <Compile Include="Objects\CameraTrigger.cs" />

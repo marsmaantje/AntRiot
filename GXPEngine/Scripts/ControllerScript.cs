@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Objects;
+using GXPEngine;
 using TiledMapParser;
 
 namespace Scripts
@@ -19,6 +20,8 @@ namespace Scripts
         //local variables
         bool prevShootButton = false;
         int offset = 512;
+        int lastMessageTime = 0;
+        const int timeout = 2000;
 
         //Incoming signals
         int pinReading = 0;
@@ -50,10 +53,20 @@ namespace Scripts
                 {
                     if (line.Length > 1)
                     {
+                        lastMessageTime = Time.time;
                         string[] args = line.Split(',');
-                        parseIntOrDefault(args[0], out pinReading, pinReading);
-                        parseBoolOrDefault(args[1], out shootButton, false);
+                        if (args.Length >= 2)
+                        {
+                            parseIntOrDefault(args[0], out pinReading, pinReading);
+                            parseBoolOrDefault(args[1], out shootButton, false);
+                        }
                     }
+                }
+
+                if (Time.time > lastMessageTime + timeout)
+                {
+                    Console.WriteLine("not recieving anything, connecting to different device");
+                    controller.Close();
                 }
             }
             else
@@ -63,7 +76,7 @@ namespace Scripts
 
             shootButtonDown = !prevShootButton && shootButton;
             prevShootButton = shootButton;
-            stickPosition = pinReading - offset;
+            stickPosition = pinReading;
 
         }
 
@@ -76,7 +89,7 @@ namespace Scripts
             {
                 try
                 {
-                    controller = new SerialPort(ports[0]);
+                    controller = new SerialPort(ports[ports.Length - 1]);
                     controller.Open();
                 } catch (Exception e)
                 { }

@@ -57,7 +57,9 @@ namespace Objects
             {
                 if(other is Enemy)
                 {
-
+                    Console.WriteLine("collided with enemy");
+                    ((Enemy)other).kill();
+                    LateDestroy();
                 }
             }
         }
