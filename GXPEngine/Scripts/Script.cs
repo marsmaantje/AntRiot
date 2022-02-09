@@ -17,6 +17,9 @@ namespace Scripts
 
         }
 
+        public Script() : base()
+        { }
+
         public override void initialize(Scene parentScene)
         {
             base.initialize(parentScene);

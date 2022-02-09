@@ -10,6 +10,8 @@ namespace Scripts
 {
     class TestScript : Script
     {
+        SerialPort controller;
+
         public TestScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
 
@@ -30,10 +32,22 @@ namespace Scripts
             {
                 Console.WriteLine(port);
             }
+
+            if (ports.Length > 0)
+            {
+                controller = new SerialPort(ports[0]);
+                controller.Open();
+            }
         }
 
         public void Update()
         {
+            //if there is a controller, read the serial data
+            if(controller != null)
+            {
+                string input = controller.ReadExisting();
+                Console.WriteLine(input);
+            }
         }
     }
 }

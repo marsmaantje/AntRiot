@@ -21,6 +21,8 @@ namespace Objects
             this.obj = obj;
         }
 
+        public CustomObject() : base("sprites/empty.png", 1, 1, addCollider: false) { }
+
         public virtual void initialize(Scene parentScene)
         {
             this.parentScene = parentScene;

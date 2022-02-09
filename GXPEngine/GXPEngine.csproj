@@ -97,7 +97,8 @@
     <Compile Include="Objects\Ladder.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scene.cs" />
-    <Compile Include="Scripts\BaseScript.cs" />
+    <Compile Include="Scripts\Script.cs" />
+    <Compile Include="Scripts\ControllerScript.cs" />
     <Compile Include="Scripts\TestScript.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="UIElements\Button.cs" />

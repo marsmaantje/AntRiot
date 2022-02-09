@@ -51,6 +51,11 @@ namespace GXPEngine
 		/// </param> 
 		public AnimationSprite (string filename, int cols, int rows, int frames=-1, bool keepInCache=false, bool addCollider=true) : base(filename,keepInCache,addCollider)
 		{
+			if (cols < 1)
+				throw new Exception("Amount of collumns cannot be smaller than 1");
+			if (rows < 1)
+				throw new Exception("Amount of rows cannot be smaller than 1");
+
 			name = filename;
 			initializeAnimFrames(cols, rows, frames);
 		}
