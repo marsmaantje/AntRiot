@@ -75,10 +75,6 @@ class Player : EasyDraw
         createAnimation();
         this.x += animation.width / 2; //offset for the tiled player position/origin
 
-
-
-        
-
     }
 
     /// <summary>
@@ -92,29 +88,10 @@ class Player : EasyDraw
     void Update()
     {
         playerAnimation();
-        updateCameraTarget();
         updateUI();
 
         if (Input.GetKey(Key.A))
             controller.callibrate();
-    }
-
-    /// <summary>
-    /// checks whether the player is colliding with a CameraTrigger, if this is the case it will set the cameraTarget of the scene to that instead of the player
-    /// </summary>
-    private void updateCameraTarget()
-    {
-        GameObject[] collisions = this.GetCollisions(true, false);
-        foreach (GameObject collision in collisions)
-        {
-            if (collision is Objects.CameraTrigger)
-            {
-                parentScene.setLookTarget(((CameraTrigger)collision).target);
-                return;
-            }
-        }
-        parentScene.setLookTarget(this.cameraTarget);
-
     }
 
     /// <summary>
@@ -127,15 +104,21 @@ class Player : EasyDraw
 
     private void movePlayer()
     {
-        /*
-        float rotationDelta = (controller.stickPosition) / 1024f * movementSpeed;
-        Console.WriteLine(rotationDelta);
-        if (Mathf.Abs(rotationDelta) > stoppedMargin)
-            animation.rotation += rotationDelta;
-        */
         float rotationDelta = animation.rotation - controller.stickPosition * 360 / 1024;
         animation.rotation -= rotationDelta * Time.deltaTime / 1000f * 10;
         animation.rotation %= 360;
+
+        //if you want to shoot
+        if(controller.shootButtonDown)
+        {
+            //spawn bullet
+            Bullet bullet = new Bullet("sprites/Battery.png", 1, 1, 1, 50);
+            bullet.SetOrigin(bullet.width / 2, bullet.height);
+            parentScene.AddChild(bullet);
+            bullet.SetXY(this.x, this.y);
+            bullet.rotation = animation.rotation;
+            bullet.initialize(parentScene);
+        }
     }
 
     /// <summary>
@@ -144,23 +127,6 @@ class Player : EasyDraw
     private void updateUI()
     {
         
-    }
-
-    /// <summary>
-    /// Checks whether the player is over a ladder for changing the locomotion
-    /// </summary>
-    /// <returns>Whether the player is currently on a ladder</returns>
-    private bool isOverLadder()
-    {
-        GameObject[] collisions = this.GetCollisions(true, false);
-        foreach (GameObject collision in collisions)
-        {
-            if (collision is Objects.Ladder)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /// <summary>

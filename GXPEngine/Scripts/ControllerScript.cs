@@ -11,9 +11,18 @@ namespace Scripts
     class ControllerScript : Script
     {
         SerialPort controller;
+
+        //public variables
         public int stickPosition = 0;
-        int pinReading = 0;
+        public bool shootButtonDown = false;
+
+        //local variables
+        bool prevShootButton = false;
         int offset = 512;
+
+        //Incoming signals
+        int pinReading = 0;
+        bool shootButton = false;
 
 
         public ControllerScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj) { }
@@ -34,13 +43,15 @@ namespace Scripts
             if (controller != null && controller.IsOpen)
             {
                 string input = controller.ReadExisting();
-                string[] args = input.Split('\n');
+                string[] lines = input.Split('\n');
 
-                foreach (string arg in args)
+                foreach (string line in lines)
                 {
-                    if (arg.Length > 0)
+                    if (line.Length > 1)
                     {
-                        parseIntOrDefault(arg, out pinReading, pinReading);
+                        string[] args = line.Split(',');
+                        parseIntOrDefault(args[0], out pinReading, pinReading);
+                        parseBoolOrDefault(args[1], out shootButton, false);
                     }
                 }
             }
@@ -49,7 +60,10 @@ namespace Scripts
                 findController();
             }
 
+            shootButtonDown = !prevShootButton && shootButton;
+            prevShootButton = shootButton;
             stickPosition = pinReading - offset;
+
         }
 
         void findController()
@@ -73,6 +87,13 @@ namespace Scripts
             int result = 0;
 
             output = Int32.TryParse(arg, out result) ? result : fallback;
+        }
+
+        void parseBoolOrDefault(string arg, out bool output, bool fallback)
+        {
+            int result = 0;
+            Int32.TryParse(arg, out result);
+            output = result > 0;
         }
 
         public void callibrate()
