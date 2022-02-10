@@ -13,8 +13,9 @@ namespace Scripts
     class TestScript : Script
     {
         int lastSpawnTime = 0;
-        const int spawnInterval = 2000;
+        const int spawnInterval = 1000;
         Random rand = new Random();
+        int lastSpawn = 0;
 
         public TestScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
@@ -32,8 +33,13 @@ namespace Scripts
             if(Time.time > lastSpawnTime + spawnInterval)
             {
                 lastSpawnTime = Time.time;
-                float angle = (float)(rand.NextDouble() * 360);
-                Console.WriteLine("spawning bug at " + angle);
+                /*
+                float angle = (float)(lastSpawn * 18);
+                lastSpawn++;
+                lastSpawn %= 20;
+                /**/
+                
+                float angle = (float)(rand.Next(0,19) * 18);
                 ApproachingEnemy enemy = new ApproachingEnemy("sprites/bug3.png", 1, 1, 1, angle);
                 parentScene.AddChild(enemy);
                 enemy.initialize(parentScene);

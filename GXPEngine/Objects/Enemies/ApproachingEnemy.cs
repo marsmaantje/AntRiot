@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GXPEngine;
 
 namespace Objects.Enemies
 {
@@ -13,9 +14,10 @@ namespace Objects.Enemies
 
         }
 
-        public void Update()
+        public new void Update()
         {
-
+            base.Update();
+            Move(0, 30*Time.deltaTime / 1000f);
         }
     }
 }

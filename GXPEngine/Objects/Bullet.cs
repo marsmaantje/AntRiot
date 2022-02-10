@@ -46,7 +46,6 @@ namespace Objects
             if(outsideX || outsideY)
             {
                 this.LateDestroy();
-                Console.WriteLine("bullet destroyed at X:" + x + " Y:" + y);
             }
         }
 
@@ -57,7 +56,6 @@ namespace Objects
             {
                 if(other is Enemy)
                 {
-                    Console.WriteLine("collided with enemy");
                     ((Enemy)other).kill();
                     LateDestroy();
                 }

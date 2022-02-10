@@ -9,38 +9,37 @@ using Objects;
 using UIElements;
 using Scripts;
 
-class Player : EasyDraw
+class Player : Pivot
 {
-    private const int objectWidth = 14;
-    private const int objectHeight = 22;
 
-    //tiled object to read data from
+    //local variables
+    private float rotationSmoothSpeed = 8;
+    private float shieldMovementSpeed = 5; //degrees per  second
+    private int lives = 3; //amount of lives the player has before death
+
+    //objects
     TiledObject obj;
-
-    //movement speed
-    private float movementSpeed = 50;
-    private float stoppedMargin = 1f;
-
     private Scene parentScene;
-    private AnimationSprite animation;
+    public AnimationSprite shooterAnimation;
+    ControllerScript controller;
 
     //camera target when following the player
     public Pivot cameraTarget;
-    private float cameraSize = 6f;
-
-    ControllerScript controller;
 
 
-    public Player() : base(objectWidth, objectHeight, true) { readVariables(); }
 
-    public Player(TiledObject obj) : base(objectWidth, objectHeight, true)
+    public Player() : base() { readVariables(); }
+
+    public Player(TiledObject obj) : base()
     {
         this.obj = obj;
+        readVariables();
     }
 
-    public Player(String filename, int cols, int rows, TiledObject obj) : base(objectWidth, objectHeight, true)
+    public Player(String filename, int cols, int rows, TiledObject obj) : base()
     {
         this.obj = obj;
+        readVariables();
     }
 
     /// <summary>
@@ -49,14 +48,14 @@ class Player : EasyDraw
     /// </summary>
     private void createAnimation()
     {
-        animation = new AnimationSprite("sprites/OrangeRobot_SpriteSheet.png", 8, 5, -1, true, false);
-        AddChild(animation);
-        animation.SetOrigin(animation.width / 2, animation.height);
-        animation.SetXY(0, 0);
+        shooterAnimation = new AnimationSprite("sprites/slingshot1.png", 1, 1, -1, true, true);
+        AddChild(shooterAnimation);
+        shooterAnimation.SetOrigin(shooterAnimation.width / 2, shooterAnimation.height);//middle bottom
+        shooterAnimation.SetXY(0, 0);
 
         //set the animation to its idle state and add the speedIndicator
-        animation.currentFrame = 0;
-        animation.SetCycle(0, 5);
+        shooterAnimation.currentFrame = 0;
+        shooterAnimation.SetCycle(0, 5);
     }
 
     /// <summary>
@@ -71,16 +70,14 @@ class Player : EasyDraw
         AddChild(controller);
 
         this.parentScene = parentScene;
-        this.SetOrigin(width / 2, height);
         createAnimation();
-        this.x += animation.width / 2; //offset for the tiled player position/origin
 
 
-        this.SetScaleXY(2, 2);
+        this.SetScaleXY(1, 1);
         Pivot lookTarget = new Pivot();
         AddChild(lookTarget);
         lookTarget.SetXY(0, 0);
-        lookTarget.SetScaleXY(0.5f, 0.5f);
+        lookTarget.SetScaleXY(1f, 1f);
         parentScene.setLookTarget(lookTarget);
         parentScene.jumpToTarget();
     }
@@ -98,9 +95,6 @@ class Player : EasyDraw
         playerInput();
         playerAnimation();
         updateUI();
-
-        if (Input.GetKey(Key.A))
-            controller.callibrate();
     }
 
     /// <summary>
@@ -113,33 +107,27 @@ class Player : EasyDraw
 
     private void playerInput()
     {
-        float rotationDelta = animation.rotation - controller.stickPosition;
+        float rotationDelta = shooterAnimation.rotation - controller.shooterStickPosition;
         
         if(rotationDelta > 180)
-        {
-            rotationDelta = animation.rotation - controller.stickPosition - 360;
-
-        }
+            rotationDelta = shooterAnimation.rotation - controller.shooterStickPosition - 360;
         else if (rotationDelta < -180)
-        {
-            rotationDelta = animation.rotation - controller.stickPosition + 360;
-
-        }
+            rotationDelta = shooterAnimation.rotation - controller.shooterStickPosition + 360;
         
-        animation.rotation -= rotationDelta * Time.deltaTime / 1000f * 10;
-        animation.rotation -= Mathf.Floor(animation.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
+        shooterAnimation.rotation -= rotationDelta * Time.deltaTime / 1000f * rotationSmoothSpeed;
+        shooterAnimation.rotation -= Mathf.Floor(shooterAnimation.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
         
 
         //if you want to shoot
-        //if(controller.shootButtonDown)
-        if(Input.GetKeyDown(Key.SPACE))
+        //if(Input.GetKeyDown(Key.SPACE))
+        if(controller.shootButtonDown)
         {
             //spawn bullet
-            Bullet bullet = new Bullet("sprites/Battery.png", 1, 1, 1, 70);
+            Bullet bullet = new Bullet("sprites/ant.png", 1, 1, 1, 70);
             bullet.SetOrigin(bullet.width / 2, bullet.height);
             parentScene.AddChild(bullet);
             bullet.SetXY(this.x, this.y);
-            bullet.rotation = animation.rotation;
+            bullet.rotation = shooterAnimation.rotation;
             bullet.initialize(parentScene);
         }
     }
@@ -161,11 +149,18 @@ class Player : EasyDraw
         
     }
 
+    public void takeDamage(int damage = 1)
+    {
+        lives -= damage;
+        if (lives <= 0)
+            die();
+    }
+
     /// <summary>
-    /// initiates the explosion of the player death
+    /// loads the main menu
     /// </summary>
     public void die()
     {
-        
+        ((MyGame)game).loadNewLevel("maps/Main menu.tmx");
     }
 }

@@ -14,18 +14,23 @@ namespace Scripts
         SerialPort controller;
 
         //public variables
-        public int stickPosition = 0;
+        public int shooterStickPosition = 0;
         public bool shootButtonDown = false;
+        public int defenderStickPosition = 0;
+        public bool defenderButtonDown = false;
 
         //local variables
         bool prevShootButton = false;
-        int offset = 512;
+        bool prevDefenderButton = false;
+
         int lastMessageTime = 0;
         const int timeout = 2000;
 
         //Incoming signals
-        int pinReading = 0;
-        bool shootButton = false;
+        int shooterPinReading = 0;
+        bool shooterButton = false;
+        int defenderPinReading = 0;
+        bool defenderButton = false;
 
 
         public ControllerScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj) { }
@@ -55,10 +60,12 @@ namespace Scripts
                     {
                         lastMessageTime = Time.time;
                         string[] args = line.Split(',');
-                        if (args.Length >= 2)
+                        if (args.Length >= 4)
                         {
-                            parseIntOrDefault(args[0], out pinReading, pinReading);
-                            parseBoolOrDefault(args[1], out shootButton, false);
+                            parseIntOrDefault(args[0], out shooterPinReading, shooterPinReading);
+                            parseBoolOrDefault(args[1], out shooterButton, false);
+                            parseIntOrDefault(args[2], out defenderPinReading, defenderPinReading);
+                            parseBoolOrDefault(args[3], out defenderButton, false);
                         }
                     }
                 }
@@ -74,9 +81,9 @@ namespace Scripts
                 findController();
             }
 
-            shootButtonDown = !prevShootButton && shootButton;
-            prevShootButton = shootButton;
-            stickPosition = pinReading;
+            shootButtonDown = !prevShootButton && shooterButton;
+            prevShootButton = shooterButton;
+            shooterStickPosition = shooterPinReading;
 
         }
 
@@ -108,11 +115,6 @@ namespace Scripts
             int result = 0;
             Int32.TryParse(arg, out result);
             output = result > 0;
-        }
-
-        public void callibrate()
-        {
-            offset = pinReading;
         }
     }
 }
