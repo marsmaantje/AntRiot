@@ -6,20 +6,21 @@ using GXPEngine;
 
 class Shield : Pivot
 {
-    List<AnimationSprite> segments;
+    List<ShieldSegment> segments;
     string spriteSheetName;
     Scene parentScene;
+    float distance = 80; //distance from center in pixels
+    const float radToDeg = 180 / Mathf.PI;
 
     public int length
     {
         get => segments.Count;
-
-        set => setShieldSize(value);
+        set => setShieldSize((int)Mathf.Max(value, 2));
     }
 
     public Shield(string filename)
     {
-        segments = new List<AnimationSprite>();
+        segments = new List<ShieldSegment>();
         spriteSheetName = filename;
     }
 
@@ -34,7 +35,10 @@ class Shield : Pivot
     /// </summary>
     void addSegment()
     {
-        segments.Add(new ShieldSegment(spriteSheetName, 3, 1, 3));
+        ShieldSegment newSegment = new ShieldSegment(spriteSheetName, 1, 3, 3);
+        segments.Add(newSegment);
+        AddChild(newSegment);
+
     }
 
     /// <summary>
@@ -42,7 +46,8 @@ class Shield : Pivot
     /// </summary>
     void removeSegment()
     {
-        segments.RemoveAt(0);
+        segments[0].LateDestroy();
+        segments.Remove(segments[0]);
     }
 
     /// <summary>
@@ -50,11 +55,38 @@ class Shield : Pivot
     /// </summary>
     void recalculateShield()
     {
-        int i = 0;
-        foreach (ShieldSegment segment in segments)
+        float arcLength = length * 16 + 68; //(magic values yay) total length the shield will have
+        float anglePerSegment = 90 - (Mathf.Atan((2*distance)/18) * radToDeg);
+        float specialAngle = 90 - (Mathf.Atan((2*distance)/20) * radToDeg);
+        for (int i = 0; i < length; i++)
         {
+            ShieldSegment segment = segments[i];
+            segment.SetXY(0,0);
+            segment.SetOrigin(segment.width / 2, segment.height / 2);
 
-            i++;
+            if (i == 0) //head
+            {
+                segment.rotation = (i - length / 2) * anglePerSegment - specialAngle;
+                segment.Move(0, distance);
+                segment.rotation += 90;
+                segment.currentFrame = 0;
+
+            }
+            else if (i == length - 1) //tail
+            {
+                segment.rotation = (i - length / 2) * anglePerSegment + specialAngle;
+                segment.Move(0, distance);
+                segment.rotation += 90;
+                segment.currentFrame = 2;
+
+            }
+            else //body
+            {
+                segment.rotation = (i - length/2)*anglePerSegment;
+                segment.Move(0, distance);
+                segment.rotation += 90;
+                segment.currentFrame = 1;
+            }
         }
     }
 
@@ -65,18 +97,19 @@ class Shield : Pivot
     void setShieldSize(int segments)
     {
         //only do anything if the lenth is actually different
-        if(segments != length)
+        if (segments != length)
         {
-            if(segments > length)
+            int startLength = length;
+            if (segments > startLength)
             {
-                for (int i = 0; i < segments - length; i++)
+                for (int i = 0; i < segments - startLength; i++)
                 {
                     addSegment();
                 }
             }
             else
             {
-                for (int i = 0; i < length - segments; i++)
+                for (int i = 0; i < startLength - segments; i++)
                 {
                     removeSegment();
                 }
@@ -89,7 +122,12 @@ class Shield : Pivot
 /// <summary>
 /// class made just for typeChecking on enemy colission
 /// </summary>
-class ShieldSegment : AnimationSprite 
+class ShieldSegment : AnimationSprite
 {
     public ShieldSegment(string filename, int cols, int rows, int frames = -1) : base(filename, cols, rows, frames) { }
+
+    public void Update()
+    {
+        //this.rotation = Time.time / 100;
+    }
 }

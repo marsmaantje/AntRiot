@@ -10,7 +10,7 @@ namespace Objects.Enemies
     class Enemy : CustomObject
     {
         float angle = 0;
-        Pivot pivot;
+        protected Pivot pivot;
         const float degToRad = Mathf.PI / 180f;
 
         public Enemy(string filename, int cols, int rows, int startFrame, float angle) : base(null, filename, cols, rows)
@@ -60,6 +60,7 @@ namespace Objects.Enemies
             Console.WriteLine(distance);
             */
             distance = 200;
+
             this.SetXY(0, -distance);
         }
         

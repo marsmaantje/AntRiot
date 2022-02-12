@@ -34,6 +34,17 @@ namespace UIElements
                 if (Input.GetMouseButtonDown(0))
                     OnClicked(); //call the clicked method if the mouse is over and just pressed down
             }
+
+            GameObject[] objects = GetCollisions();
+            foreach (GameObject other in objects)
+            {
+                if(other is Bullet)
+                {
+                    currentFrame = pressedFrame;
+                    OnClicked();
+                    break;
+                }
+            }
         }
 
         /// <summary>

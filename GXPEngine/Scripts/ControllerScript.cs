@@ -20,8 +20,8 @@ namespace Scripts
         public bool defenderButtonDown = false;
 
         //local variables
-        bool prevShootButton = false;
-        bool prevDefenderButton = false;
+        public bool prevShootButton = false;
+        public bool prevDefenderButton = false;
 
         int lastMessageTime = 0;
         const int timeout = 2000;
@@ -84,6 +84,9 @@ namespace Scripts
             shootButtonDown = !prevShootButton && shooterButton;
             prevShootButton = shooterButton;
             shooterStickPosition = shooterPinReading;
+            defenderButtonDown = !prevDefenderButton && defenderButton;
+            prevDefenderButton = defenderButton;
+            defenderStickPosition = defenderPinReading;
 
         }
 

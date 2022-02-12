@@ -11,7 +11,6 @@ using Scripts;
 
 class Player : Pivot
 {
-
     //local variables
     private float rotationSmoothSpeed = 8;
     private float shieldMovementSpeed = 5; //degrees per  second
@@ -22,6 +21,7 @@ class Player : Pivot
     private Scene parentScene;
     public AnimationSprite shooterAnimation;
     ControllerScript controller;
+    public Shield shield;
 
     //camera target when following the player
     public Pivot cameraTarget;
@@ -64,15 +64,23 @@ class Player : Pivot
     /// <param name="parentScene">The scene this player should callback for change of camera target</param>
     public void initialize(Scene parentScene)
     {
-        //controller = new ControllerScript("sprites/empty.png", 1, 1, obj);
+        //initialize the player input
         controller = new ControllerScript();
         controller.initialize(parentScene);
         AddChild(controller);
 
         this.parentScene = parentScene;
+
+        //create the players
         createAnimation();
+        shield = new Shield("sprites/shieldall.png");
+        AddChild(shield);
+        shield.SetXY(0, 0);
+        shield.Initialize(parentScene);
+        shield.rotation = 0;
+        shield.length = 5;
 
-
+        //setup the camera
         this.SetScaleXY(1, 1);
         Pivot lookTarget = new Pivot();
         AddChild(lookTarget);
@@ -92,9 +100,15 @@ class Player : Pivot
 
     void Update()
     {
-        playerInput();
+        shooterPlayerInput();
+        defenderPlayerInput();
         playerAnimation();
         updateUI();
+
+        if (Input.GetKeyDown(Key.PLUS))
+            shield.length++;
+        if (Input.GetKeyDown(Key.MINUS))
+            shield.length--;
     }
 
     /// <summary>
@@ -105,7 +119,7 @@ class Player : Pivot
 
     }
 
-    private void playerInput()
+    private void shooterPlayerInput()
     {
         float rotationDelta = shooterAnimation.rotation - controller.shooterStickPosition;
         
@@ -123,7 +137,7 @@ class Player : Pivot
         if(controller.shootButtonDown)
         {
             //spawn bullet
-            Bullet bullet = new Bullet("sprites/ant.png", 1, 1, 1, 70);
+            Bullet bullet = new Bullet("sprites/ant.png", 1, 1, 1, 90);
             bullet.SetOrigin(bullet.width / 2, bullet.height);
             parentScene.AddChild(bullet);
             bullet.SetXY(this.x, this.y);
@@ -132,12 +146,26 @@ class Player : Pivot
         }
     }
 
+    private void defenderPlayerInput()
+    {
+        float rotationDelta = shield.rotation - controller.defenderStickPosition;
+
+        if (rotationDelta > 180)
+            rotationDelta = shield.rotation - controller.defenderStickPosition - 360;
+        else if (rotationDelta < -180)
+            rotationDelta = shield.rotation - controller.defenderStickPosition + 360;
+
+        shield.rotation -= rotationDelta * Time.deltaTime / 1000f * rotationSmoothSpeed;
+        shield.rotation -= Mathf.Floor(shield.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
+
+    }
+
     /// <summary>
     /// Updates the Energy bar at the top of the screen
     /// </summary>
     private void updateUI()
     {
-        
+
     }
 
     /// <summary>

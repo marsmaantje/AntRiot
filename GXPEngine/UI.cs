@@ -20,7 +20,8 @@ class UI : EasyDraw
         elements = new Dictionary<string, GameObject>();
         TextAlign(CenterMode.Center, CenterMode.Center);
         ShapeAlign(CenterMode.Center, CenterMode.Center);
-        TextSize(10);
+        TextSize(30);
+        Console.WriteLine("ui initialized");
     }
 
     /// <summary>
@@ -52,10 +53,8 @@ class UI : EasyDraw
             Clear(0, 0, 0, 0);
             this.text = text;
             this.textPriority = priority;
-            Fill(0,100);
-            Rect(width / 2, height - 25 , TextWidth(this.text), TextHeight(this.text));
             Fill(255);
-            Text(this.text, width / 2 + 5, height - 25);
+            Text(this.text, width / 2 + 5, height - 30);
         }
     }
 
