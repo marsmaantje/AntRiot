@@ -9,7 +9,7 @@ namespace Objects.Enemies
     class ApproachingEnemy : Enemy
     {
 
-        public ApproachingEnemy(string filename, int cols, int rows, int startFrame, float angle) : base(filename, cols, rows, startFrame, angle)
+        public ApproachingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1) : base(filename, cols, rows, startFrame, angle, distance)
         {
 
         }

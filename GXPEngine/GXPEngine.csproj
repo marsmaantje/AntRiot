@@ -89,6 +89,7 @@
     <Compile Include="Objects\Enemies\ShootingEnemy.cs" />
     <Compile Include="Objects\Enemies\ApproachingEnemy.cs" />
     <Compile Include="Objects\Enemies\Enemy.cs" />
+    <Compile Include="Objects\Enemies\Shot.cs" />
     <Compile Include="Objects\Sign.cs" />
     <Compile Include="Objects\CameraTrigger.cs" />
     <Compile Include="Player.cs" />

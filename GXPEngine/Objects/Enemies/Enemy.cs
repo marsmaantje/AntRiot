@@ -12,11 +12,13 @@ namespace Objects.Enemies
         float angle = 0;
         protected Pivot pivot;
         const float degToRad = Mathf.PI / 180f;
+        float startDistance;
 
-        public Enemy(string filename, int cols, int rows, int startFrame, float angle) : base(null, filename, cols, rows)
+        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1) : base(null, filename, cols, rows)
         {
             currentFrame = startFrame;
             this.angle = angle;
+            startDistance = distance;
         }
 
         /// <summary>
@@ -34,40 +36,41 @@ namespace Objects.Enemies
 
             Vector2 globalPosition = TransformPoint(0, 0);
             float globalScale = TransformDirection(1, 0).length();
-
-            //calculate
-            float distance = 0;
-            /*
-            switch(Mathf.Floor(angle/90f))
+            if (startDistance < 0)
             {
-                case 0:
-                    Console.WriteLine(0);
-                    distance = angle == 0 ? globalPosition.y: Mathf.Min(globalPosition.y / Mathf.Cos(angle * degToRad), globalPosition.x / Mathf.Cos((90 - angle) * degToRad));
-                    break;
+                //calculate
+                /*
+                switch(Mathf.Floor(angle/90f))
+                {
+                    case 0:
+                        Console.WriteLine(0);
+                        distance = angle == 0 ? globalPosition.y: Mathf.Min(globalPosition.y / Mathf.Cos(angle * degToRad), globalPosition.x / Mathf.Cos((90 - angle) * degToRad));
+                        break;
 
-                case 1:
-                    Console.WriteLine(1);
-                    break;
+                    case 1:
+                        Console.WriteLine(1);
+                        break;
 
-                case 2:
-                    Console.WriteLine(2);
-                    break;
+                    case 2:
+                        Console.WriteLine(2);
+                        break;
 
-                case 3:
-                    Console.WriteLine(3);
-                    break;
+                    case 3:
+                        Console.WriteLine(3);
+                        break;
+                }
+                Console.WriteLine(distance);
+                */
+                startDistance = 200;
             }
-            Console.WriteLine(distance);
-            */
-            distance = 200;
-
-            this.SetXY(0, -distance);
+            Console.WriteLine(startDistance);
+            this.SetXY(0, -startDistance);
         }
-        
+
         public void Update()
         {
             GameObject[] hits = GetCollisions();
-            if(y >= -this.height)
+            if (y >= -this.height)
             {
                 parentScene.player.takeDamage();
                 kill();
@@ -90,7 +93,7 @@ namespace Objects.Enemies
         /// <summary>
         /// deletes the enemy and its pivot
         /// </summary>
-        public void kill()
+        public virtual void kill()
         {
             this.LateDestroy();
             pivot.LateDestroy();
@@ -108,7 +111,7 @@ namespace Objects.Enemies
             float returnVal = float.MaxValue;
             foreach (float value in inputs)
             {
-                if(Mathf.Abs(value) < Mathf.Abs(returnVal))
+                if (Mathf.Abs(value) < Mathf.Abs(returnVal))
                 {
                     returnVal = value;
                 }

@@ -70,7 +70,6 @@ class Shield : Pivot
                 segment.Move(0, distance);
                 segment.rotation += 90;
                 segment.currentFrame = 0;
-
             }
             else if (i == length - 1) //tail
             {
@@ -78,7 +77,6 @@ class Shield : Pivot
                 segment.Move(0, distance);
                 segment.rotation += 90;
                 segment.currentFrame = 2;
-
             }
             else //body
             {
