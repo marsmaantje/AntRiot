@@ -23,6 +23,7 @@ class Player : Pivot
     ControllerScript controller;
     public Shield shield;
     LivesCounter livesCounter;
+    ScoreDisplay scoreDisplay;
 
     //camera target when following the player
     public Pivot cameraTarget;
@@ -93,6 +94,12 @@ class Player : Pivot
         //setup the livesCounter
         livesCounter = new LivesCounter("sprites/heart.png", new Vector2(0,0), new Vector2(300,0), 0.6f, 5);
         parentScene.ui.addElement(livesCounter, "livesCounter", 0, 0);
+
+        //setup the score Display
+        scoreDisplay = new ScoreDisplay(200, 50);
+        scoreDisplay.TextAlign(CenterMode.Min, CenterMode.Min);
+        parentScene.ui.addElement(scoreDisplay, "scoreDisplay", game.width - 120, game.height - 60);
+        scoreDisplay.setText(Globals.score.ToString());
 
     }
 

@@ -15,12 +15,16 @@ namespace Scripts
         //public variables
         public int shooterStickPosition = 0;
         public bool shootButtonDown = false;
+        public bool shootSpecialDown = false;
         public int defenderStickPosition = 0;
         public bool defenderButtonDown = false;
+        public bool defenderSpecialDown = false;
 
         //local variables
         public bool prevShootButton = false;
+        public bool prevShootSpecial = false;
         public bool prevDefenderButton = false;
+        public bool prevDefenderSpecial = false;
 
         int lastMessageTime = 0;
         const int timeout = 2000;
@@ -28,8 +32,10 @@ namespace Scripts
         //Incoming signals
         int shooterPinReading = 0;
         bool shooterButton = false;
+        bool shooterSpecial = false;
         int defenderPinReading = 0;
         bool defenderButton = false;
+        bool defenderSpecial = false;
 
 
         public ControllerScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj) { }
@@ -59,12 +65,15 @@ namespace Scripts
                     {
                         lastMessageTime = Time.time;
                         string[] args = line.Split(',');
-                        if (args.Length >= 4)
+                        if (args.Length >= 6)
                         {
                             parseIntOrDefault(args[0], out shooterPinReading, shooterPinReading);
                             parseBoolOrDefault(args[1], out shooterButton, false);
                             parseIntOrDefault(args[2], out defenderPinReading, defenderPinReading);
                             parseBoolOrDefault(args[3], out defenderButton, false);
+                            parseBoolOrDefault(args[4], out shooterSpecial, false);
+                            parseBoolOrDefault(args[5], out defenderSpecial, false);
+
                         }
                     }
                 }
@@ -81,10 +90,15 @@ namespace Scripts
             }
 
             shootButtonDown = !prevShootButton && shooterButton;
+            shootSpecialDown = !prevShootSpecial && shooterSpecial;
             prevShootButton = shooterButton;
+            prevShootSpecial = shooterSpecial;
             shooterStickPosition = shooterPinReading;
+
             defenderButtonDown = !prevDefenderButton && defenderButton;
+            defenderSpecialDown = !prevDefenderSpecial && defenderSpecial;
             prevDefenderButton = defenderButton;
+            prevDefenderSpecial = defenderSpecial;
             defenderStickPosition = defenderPinReading;
 
         }

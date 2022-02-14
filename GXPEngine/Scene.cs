@@ -104,7 +104,10 @@ class Scene : Pivot
                 float parallaxX = parser.map.ImageLayers[i].parallaxx;
                 float parallaxY = parser.map.ImageLayers[i].parallaxy;
                 Layers.ImageLayer imageLayer = new Layers.ImageLayer(parser, parser.map.ImageLayers[i], this, parallaxX, parallaxY);
-                AddChild(imageLayer);
+                if (parser.map.ImageLayers[i].GetBoolProperty("isOnTop", false))
+                    ui.AddChild(imageLayer);
+                else
+                    AddChild(imageLayer);
                 //parser.rootObject = imageLayer;
                 //parser.LoadImageLayers(new int[] { i });
             }

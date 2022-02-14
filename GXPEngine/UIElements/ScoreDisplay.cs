@@ -12,9 +12,15 @@ namespace UIElements
     class ScoreDisplay : EasyDraw
     {
 
-        public ScoreDisplay() : base(100,100)
+        public ScoreDisplay(int width, int height) : base(width, height, addCollider:false)
         {
+            setText("");
+        }
 
+        public void setText(string newText)
+        {
+            Clear(0, 0, 0, 0);
+            Text(newText, 0, 0);
         }
     }
 }
