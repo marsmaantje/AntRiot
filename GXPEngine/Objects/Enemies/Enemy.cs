@@ -13,12 +13,14 @@ namespace Objects.Enemies
         protected Pivot pivot;
         const float degToRad = Mathf.PI / 180f;
         float startDistance;
+        int score;
 
-        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1) : base(null, filename, cols, rows)
+        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0) : base(null, filename, cols, rows)
         {
             currentFrame = startFrame;
             this.angle = angle;
             startDistance = distance;
+            this.score = score;
         }
 
         /// <summary>
@@ -95,6 +97,7 @@ namespace Objects.Enemies
         /// </summary>
         public virtual void kill()
         {
+            Globals.score += score;
             this.LateDestroy();
             pivot.LateDestroy();
         }

@@ -22,6 +22,7 @@ class Player : Pivot
     public AnimationSprite shooterAnimation;
     ControllerScript controller;
     public Shield shield;
+    LivesCounter livesCounter;
 
     //camera target when following the player
     public Pivot cameraTarget;
@@ -88,6 +89,11 @@ class Player : Pivot
         lookTarget.SetScaleXY(1f, 1f);
         parentScene.setLookTarget(lookTarget);
         parentScene.jumpToTarget();
+
+        //setup the livesCounter
+        livesCounter = new LivesCounter("sprites/heart.png", new Vector2(0,0), new Vector2(300,0), 0.6f, 5);
+        parentScene.ui.addElement(livesCounter, "livesCounter", 0, 0);
+
     }
 
     /// <summary>
@@ -106,9 +112,15 @@ class Player : Pivot
         updateUI();
 
         if (Input.GetKeyDown(Key.PLUS))
+        {
             shield.length++;
+            livesCounter.currentLives++;
+        }
         if (Input.GetKeyDown(Key.MINUS))
+        {
             shield.length--;
+            livesCounter.currentLives--;
+        }
     }
 
     /// <summary>
