@@ -39,13 +39,13 @@ namespace Scripts
                 lastSpawn %= 20;
                 /**/
 
-                //float angle = (float)(rand.Next(0, 20) * 18);
-                //ApproachingEnemy enemy = new ApproachingEnemy("sprites/bug3.png", 1, 1, 1, angle);
-                //parentScene.AddChild(enemy);
-                //enemy.initialize(parentScene);
-
                 float angle = (float)(rand.Next(0, 20) * 18);
-                Enemy enemy = new ShootingEnemy("sprites/bug7.png", 1, 1, 1, angle);
+                Enemy enemy = new ApproachingEnemy("sprites/bug3.png", 1, 1, 1, angle);
+                parentScene.AddChild(enemy);
+                enemy.initialize(parentScene);
+
+                angle = (float)(rand.Next(0, 20) * 18);
+                enemy = new ShootingEnemy("sprites/bug7.png", 1, 1, 1, angle);
                 parentScene.AddChild(enemy);
                 enemy.initialize(parentScene);
             }

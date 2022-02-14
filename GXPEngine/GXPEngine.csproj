@@ -104,6 +104,7 @@
     <Compile Include="UIElements\ExitButton.cs" />
     <Compile Include="UIElements\LivesCounter.cs" />
     <Compile Include="UIElements\PlayButton.cs" />
+    <Compile Include="UIElements\ScoreDisplay.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

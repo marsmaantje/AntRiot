@@ -111,15 +111,20 @@ class Player : Pivot
         playerAnimation();
         updateUI();
 
+        if(livesCounter.currentLives != lives)
+        {
+            livesCounter.currentLives = lives;
+        }
+
         if (Input.GetKeyDown(Key.PLUS))
         {
             shield.length++;
-            livesCounter.currentLives++;
+            lives++;
         }
         if (Input.GetKeyDown(Key.MINUS))
         {
             shield.length--;
-            livesCounter.currentLives--;
+            lives--;
         }
     }
 

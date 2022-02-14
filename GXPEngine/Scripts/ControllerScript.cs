@@ -11,7 +11,6 @@ namespace Scripts
 {
     class ControllerScript : Script
     {
-        SerialPort controller;
 
         //public variables
         public int shooterStickPosition = 0;
@@ -49,9 +48,9 @@ namespace Scripts
         public void Update()
         {
             //if there is a controller, read the serial data
-            if (controller != null && controller.IsOpen)
+            if (Globals.controller != null && Globals.controller.IsOpen)
             {
-                string input = controller.ReadExisting();
+                string input = Globals.controller.ReadExisting();
                 string[] lines = input.Split('\n');
 
                 foreach (string line in lines)
@@ -73,7 +72,7 @@ namespace Scripts
                 if (Time.time > lastMessageTime + timeout)
                 {
                     Console.WriteLine("not recieving anything, connecting to different device");
-                    controller.Close();
+                    Globals.controller.Close();
                 }
             }
             else
@@ -99,8 +98,8 @@ namespace Scripts
             {
                 try
                 {
-                    controller = new SerialPort(ports[ports.Length - 1]);
-                    controller.Open();
+                    Globals.controller = new SerialPort(ports[ports.Length - 1]);
+                    Globals.controller.Open();
                 } catch (Exception e)
                 { }
             }

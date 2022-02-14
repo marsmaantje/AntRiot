@@ -12,8 +12,8 @@ public class MyGame : Game
 
     bool levelLoad = false;
 
-    //public MyGame() : base(683, 384, true, true, 1366, 768, true)		// Create a window that's 1366x768 and fullscreen
-    public MyGame() : base(683, 384, false, false, 683, 384, true)      // Create a window that's 683x384 and NOT fullscreen
+    public MyGame() : base(683, 384, true, true, 1366, 768, true)		// Create a window that's 1366x768 and fullscreen
+    //public MyGame() : base(683, 384, false, false, 683, 384, true)      // Create a window that's 683x384 and NOT fullscreen
     {
 		createLevel(currentMapName);
 		Console.WriteLine("MyGame initialized");
