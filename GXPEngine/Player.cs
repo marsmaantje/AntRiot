@@ -14,7 +14,7 @@ class Player : Pivot
     //local variables
     private float rotationSmoothSpeed = 8;
     private float shieldMovementSpeed = 5; //degrees per  second
-    private int lives = 3; //amount of lives the player has before death
+    private int lives = 4; //amount of lives the player has before death
 
     //objects
     TiledObject obj;
@@ -50,9 +50,9 @@ class Player : Pivot
     /// </summary>
     private void createAnimation()
     {
-        shooterAnimation = new AnimationSprite("sprites/slingshot1.png", 1, 1, -1, true, true);
+        shooterAnimation = new AnimationSprite("sprites/slingshot animation spritesheet.png", 2, 2, -1, true, false);
         AddChild(shooterAnimation);
-        shooterAnimation.SetOrigin(shooterAnimation.width / 2, shooterAnimation.height);//middle bottom
+        shooterAnimation.SetOrigin(shooterAnimation.width / 2, shooterAnimation.height - 40);//middle bottom
         shooterAnimation.SetXY(0, 0);
 
         //set the animation to its idle state and add the speedIndicator
@@ -92,14 +92,15 @@ class Player : Pivot
         parentScene.jumpToTarget();
 
         //setup the livesCounter
-        livesCounter = new LivesCounter("sprites/heart.png", new Vector2(0,0), new Vector2(300,0), 0.6f, 5);
+        livesCounter = new LivesCounter("sprites/heart.png", new Vector2(10,30), new Vector2(120,0), 0.6f, 5);
         parentScene.ui.addElement(livesCounter, "livesCounter", 0, 0);
 
         //setup the score Display
-        scoreDisplay = new ScoreDisplay(200, 50);
-        scoreDisplay.TextAlign(CenterMode.Min, CenterMode.Min);
-        parentScene.ui.addElement(scoreDisplay, "scoreDisplay", game.width - 120, game.height - 60);
-        scoreDisplay.setText(Globals.score.ToString());
+        scoreDisplay = new ScoreDisplay(95, 55);
+        scoreDisplay.TextAlign(CenterMode.Center, CenterMode.Min);
+        scoreDisplay.TextSize(27);
+        parentScene.ui.addElement(scoreDisplay, "scoreDisplay", game.width - 100, game.height - 60);
+        scoreDisplay.setText(""+Globals.score);
 
     }
 
@@ -189,16 +190,7 @@ class Player : Pivot
     /// </summary>
     private void updateUI()
     {
-
-    }
-
-    /// <summary>
-    /// Adds the specified amount of energy to the player and clamps it to the max energy
-    /// </summary>
-    /// <param name="amount">amount of energy to add</param>
-    public void addEnergy(float amount)
-    {
-        
+        scoreDisplay.setText("" + Globals.score);
     }
 
     public void takeDamage(int damage = 1)

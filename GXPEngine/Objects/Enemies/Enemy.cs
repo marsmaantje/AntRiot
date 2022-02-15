@@ -14,13 +14,16 @@ namespace Objects.Enemies
         const float degToRad = Mathf.PI / 180f;
         float startDistance;
         int score;
+        int animationFrames = 1;
 
-        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0) : base(null, filename, cols, rows)
+        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(null, filename, cols, rows)
         {
             currentFrame = startFrame;
             this.angle = angle;
             startDistance = distance;
             this.score = score;
+            this.animationFrames = animationFrames;
+            SetCycle(startFrame, animationFrames);
         }
 
         /// <summary>
@@ -41,36 +44,30 @@ namespace Objects.Enemies
             if (startDistance < 0)
             {
                 //calculate
-                /*
                 switch(Mathf.Floor(angle/90f))
                 {
                     case 0:
-                        Console.WriteLine(0);
-                        distance = angle == 0 ? globalPosition.y: Mathf.Min(globalPosition.y / Mathf.Cos(angle * degToRad), globalPosition.x / Mathf.Cos((90 - angle) * degToRad));
+                        startDistance = angle == 0 ? globalPosition.y: Mathf.Min(globalPosition.y / Mathf.Cos(angle * degToRad), globalPosition.x / Mathf.Cos((90 - angle) * degToRad));
                         break;
 
                     case 1:
-                        Console.WriteLine(1);
                         break;
 
                     case 2:
-                        Console.WriteLine(2);
                         break;
 
                     case 3:
-                        Console.WriteLine(3);
                         break;
                 }
-                Console.WriteLine(distance);
-                */
+
                 startDistance = 200;
             }
-            Console.WriteLine(startDistance);
             this.SetXY(0, -startDistance);
         }
 
         public void Update()
         {
+            Animate(Globals.animationFramerate * Time.deltaTime / 1000f);
             GameObject[] hits = GetCollisions();
             if (y >= -this.height)
             {

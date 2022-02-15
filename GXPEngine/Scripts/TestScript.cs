@@ -40,12 +40,12 @@ namespace Scripts
                 /**/
 
                 float angle = (float)(rand.Next(0, 20) * 18);
-                Enemy enemy = new ApproachingEnemy("sprites/bug3.png", 1, 1, 1, angle);
+                Enemy enemy = new ApproachingEnemy("sprites/enemies.png", 4, 2, 6, angle, -1, 25, 2);
                 parentScene.AddChild(enemy);
                 enemy.initialize(parentScene);
 
                 angle = (float)(rand.Next(0, 20) * 18);
-                enemy = new ShootingEnemy("sprites/bug7.png", 1, 1, 1, angle);
+                enemy = new ShootingEnemy("sprites/enemies.png", 4, 2, 0, angle, -1, 25, 4);
                 parentScene.AddChild(enemy);
                 enemy.initialize(parentScene);
             }

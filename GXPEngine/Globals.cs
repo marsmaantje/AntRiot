@@ -14,4 +14,5 @@ static class Globals
 {
     public static int score = 0; //global because the endScreen needs to know the score you got from the game screen
     public static SerialPort controller; //global to prevent the controller from needing to reïnitialize between scenes
+    public static float animationFramerate = 18; //global so allsprites animate at the same speed
 }

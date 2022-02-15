@@ -8,7 +8,7 @@ namespace Objects.Enemies
 {
     class Shot : ApproachingEnemy
     {
-        public Shot(string filename, int cols, int rows, int startFrame, float angle, float distance = -1) : base(filename, cols, rows, startFrame, angle, distance)
+        public Shot(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
         {
 
         }

@@ -20,7 +20,10 @@ namespace UIElements
         public void setText(string newText)
         {
             Clear(0, 0, 0, 0);
-            Text(newText, 0, 0);
+            float width = 0;
+            if(HorizontalTextAlign == CenterMode.Center)
+                width = TextWidth(newText);
+            Text(newText, width/2, 0);
         }
     }
 }
