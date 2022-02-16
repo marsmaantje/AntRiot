@@ -12,6 +12,8 @@ namespace Objects.Enemies
         const int shootInterval = 1500; //minimum interval between shots
         const int shootIntervalRandomness = 800; //randomness of shotInterval
         int circleDistance = 130; //distance at wich the buf starts circling the player and shooting
+        bool finalApproach = false;
+        int ammo = 5;
         Random ran = new Random();
 
         public ShootingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
@@ -21,7 +23,7 @@ namespace Objects.Enemies
         {
             base.Update();
 
-            if(y >= -circleDistance) //if distance reached, circle and occasionally shoot
+            if(y >= -circleDistance && !finalApproach) //if distance reached, circle and occasionally shoot
             {
                 pivot.rotation += 30 * Time.deltaTime / 1000f;
 
@@ -42,6 +44,9 @@ namespace Objects.Enemies
             Shot bullet = new Shot("sprites/enemies.png", 4, 2, 4, pivot.rotation, -y, 25, 2);
             parentScene.AddChild(bullet);
             bullet.initialize(parentScene);
+            ammo--;
+            if (ammo == 0)
+                finalApproach = true;
         }
     }
 }

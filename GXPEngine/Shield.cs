@@ -11,7 +11,17 @@ class Shield : Pivot
     Scene parentScene;
     float distance = 80; //distance from center in pixels
     const float radToDeg = 180 / Mathf.PI;
+    public bool isShooting = false;
+    bool isReturning = false;
+    int shieldLength = 0;
+    float shootSpeed = 0;
+    int shootStartTime = 0;
+    int nextShrink = 0;
+    AnimationSprite bullet = new AnimationSprite("sprites/shieldroll.png", 2, 1, 2, addCollider:true);
 
+    /// <summary>
+    /// set and get the length of the shield
+    /// </summary>
     public int length
     {
         get => segments.Count;
@@ -27,7 +37,53 @@ class Shield : Pivot
     public void Initialize(Scene parentScene)
     {
         this.parentScene = parentScene;
+        bullet = new AnimationSprite("sprites/shieldroll.png", 2, 1, 2, addCollider: true);
+        bullet.visible = false;
+        AddChild(bullet);
+        bullet.SetXY(0, distance);
         SetXY(0, 0);
+    }
+
+    public void Update()
+    {
+        //if we are currently doing the shooting animation
+        if(isShooting)
+        {
+            //filthy statemachine, but it works...
+            if(length > 0 && nextShrink < Time.time)
+            {
+                nextShrink = Time.time + 200;
+                length -= (length % 2 == 0) ? 2 : 1;
+            }
+            else
+            {
+                bullet.SetXY(0, distance);
+                if(length <= 0)
+                {
+                    if(isReturning)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Tells the shield to fire, it will shrink and then roll out.
+    /// It will return once it has left the boundaries of the screen + 50 pixels
+    /// </summary>
+    /// <param name="fireSpeed">speed at which it should roll</param>
+    public void fire(float shootSpeed)
+    {
+        this.shootSpeed = shootSpeed;
+        isShooting = true;
+        shieldLength = length;
+        shootStartTime = Time.time;
     }
 
     /// <summary>
@@ -35,7 +91,7 @@ class Shield : Pivot
     /// </summary>
     void addSegment()
     {
-        ShieldSegment newSegment = new ShieldSegment(spriteSheetName, 1, 3, 3);
+        ShieldSegment newSegment = new ShieldSegment(spriteSheetName, 2, 3, 6);
         segments.Add(newSegment);
         AddChild(newSegment);
 
@@ -70,20 +126,23 @@ class Shield : Pivot
                 segment.Move(0, distance);
                 segment.rotation += 90;
                 segment.currentFrame = 0;
+                segment.SetCycle(0, 2);
             }
             else if (i == length - 1) //tail
             {
                 segment.rotation = (i - length / 2) * anglePerSegment + specialAngle;
                 segment.Move(0, distance);
                 segment.rotation += 90;
-                segment.currentFrame = 2;
+                segment.currentFrame = 4;
+                segment.SetCycle(4,2);
             }
             else //body
             {
                 segment.rotation = (i - length/2)*anglePerSegment;
                 segment.Move(0, distance);
                 segment.rotation += 90;
-                segment.currentFrame = 1;
+                segment.currentFrame = 2;
+                segment.SetCycle(2,2);
             }
         }
     }
@@ -126,6 +185,6 @@ class ShieldSegment : AnimationSprite
 
     public void Update()
     {
-        //this.rotation = Time.time / 100;
+        this.Animate(Globals.animationFramerate / 6 * Time.deltaTime / 1000f);
     }
 }

@@ -16,6 +16,16 @@ class Player : Pivot
     private float shieldMovementSpeed = 5; //degrees per  second
     private int lives = 4; //amount of lives the player has before death
 
+    private bool defenderShooting = false;
+    private float defenderShootSpeed = 300;
+    private float defenderShootTransitionTime = 500;
+
+    private int specialCooldown = 8000;
+    private int prevSpecialTime = 0;
+    private bool specialFiring = false;
+    private int specialDuration = 2000;
+    private float specialRotationSpeed = 720;
+
     //objects
     TiledObject obj;
     private Scene parentScene;
@@ -50,14 +60,13 @@ class Player : Pivot
     /// </summary>
     private void createAnimation()
     {
-        shooterAnimation = new AnimationSprite("sprites/slingshot animation spritesheet.png", 2, 2, -1, true, false);
+        shooterAnimation = new AnimationSprite("sprites/slingshot animation spritesheet.png", 1,7, -1, true, false);
         AddChild(shooterAnimation);
         shooterAnimation.SetOrigin(shooterAnimation.width / 2, shooterAnimation.height - 40);//middle bottom
         shooterAnimation.SetXY(0, 0);
 
         //set the animation to its idle state and add the speedIndicator
         shooterAnimation.currentFrame = 0;
-        shooterAnimation.SetCycle(0, 5);
     }
 
     /// <summary>
@@ -141,7 +150,11 @@ class Player : Pivot
     /// </summary>
     private void playerAnimation()
     {
-
+        int frame = shooterAnimation.currentFrame;
+        if(shooterAnimation.currentFrame != 0)
+            shooterAnimation.Animate(Globals.animationFramerate/2 * Time.deltaTime / 1000f);
+        if (shooterAnimation.currentFrame == 6 && shooterAnimation.currentFrame != frame)
+            fire();
     }
 
     private void shooterPlayerInput()
@@ -156,24 +169,29 @@ class Player : Pivot
         shooterAnimation.rotation -= rotationDelta * Time.deltaTime / 1000f * rotationSmoothSpeed;
         shooterAnimation.rotation -= Mathf.Floor(shooterAnimation.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
         
-
         //if you want to shoot
-        //if(Input.GetKeyDown(Key.SPACE))
-        if(controller.shootButtonDown)
+        if(controller.shootButtonDown && shooterAnimation.currentFrame == 0)
         {
-            //spawn bullet
-            Bullet bullet = new Bullet("sprites/ant.png", 1, 1, 1, 90);
-            bullet.SetOrigin(bullet.width / 2, bullet.height);
-            parentScene.AddChild(bullet);
-            bullet.SetXY(this.x, this.y);
-            bullet.rotation = shooterAnimation.rotation;
-            bullet.initialize(parentScene);
+            shooterAnimation.currentFrame = 1;
         }
+
+        //if you can activate the special
+        if((controller.prevDefenderSpecial && controller.prevShootSpecial && (controller.defenderSpecialDown || controller.shootSpecialDown))
+            && Time.time > prevSpecialTime + specialCooldown)
+        {
+            specialFiring = true;
+            prevSpecialTime = Time.time;
+        }
+
+        if (specialFiring)
+            screenClear();
     }
 
     private void defenderPlayerInput()
     {
-        float rotationDelta = shield.rotation - controller.defenderStickPosition;
+        float rotationDelta = 0;
+        if(!defenderShooting)
+            rotationDelta = shield.rotation - controller.defenderStickPosition;
 
         if (rotationDelta > 180)
             rotationDelta = shield.rotation - controller.defenderStickPosition - 360;
@@ -183,6 +201,33 @@ class Player : Pivot
         shield.rotation -= rotationDelta * Time.deltaTime / 1000f * rotationSmoothSpeed;
         shield.rotation -= Mathf.Floor(shield.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
 
+    }
+
+    /// <summary>
+    /// Clears the screen by shooting many bullets
+    /// </summary>
+    void screenClear()
+    {
+        if (prevSpecialTime + specialDuration < Time.time)
+            specialFiring = false;
+        float bulletRotation = Time.time / 1000f * specialRotationSpeed % 360;
+        fire(bulletRotation);
+        fire((bulletRotation + 180) % 360);
+    }
+
+    /// <summary>
+    /// Fires a single bullet
+    /// </summary>
+    /// <param name="rotation">direction to fire the bullet in, gets the current direction of the player if null</param>
+    void fire(float rotation = -1)
+    {
+            //spawn bullet
+            Bullet bullet = new Bullet("sprites/ant.png", 1, 1, 1, 150);
+            bullet.SetOrigin(bullet.width / 2, bullet.height);
+            parentScene.AddChild(bullet);
+            bullet.SetXY(this.x, this.y);
+            bullet.rotation = rotation < 0 ? shooterAnimation.rotation : rotation;
+            bullet.initialize(parentScene);
     }
 
     /// <summary>

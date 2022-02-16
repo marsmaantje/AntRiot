@@ -38,6 +38,7 @@ class UI : EasyDraw
         this.AddChild(element);
         element.x = x.GetValueOrDefault(element.x);
         element.y = y.GetValueOrDefault(element.y);
+        
     }
 
     /// <summary>

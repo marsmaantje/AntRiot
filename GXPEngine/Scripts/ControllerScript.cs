@@ -19,12 +19,15 @@ namespace Scripts
         public int defenderStickPosition = 0;
         public bool defenderButtonDown = false;
         public bool defenderSpecialDown = false;
+        public bool bothSpecialDown = false;
 
         //local variables
         public bool prevShootButton = false;
         public bool prevShootSpecial = false;
         public bool prevDefenderButton = false;
         public bool prevDefenderSpecial = false;
+
+        int lastSpecialPress = 0;
 
         int lastMessageTime = 0;
         const int timeout = 2000;
@@ -87,6 +90,7 @@ namespace Scripts
             else
             {
                 findController();
+                lastMessageTime = Time.time;
             }
 
             shootButtonDown = !prevShootButton && shooterButton;
@@ -114,7 +118,8 @@ namespace Scripts
                 {
                     Globals.controller = new SerialPort(ports[ports.Length - 1]);
                     Globals.controller.Open();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 { }
             }
         }

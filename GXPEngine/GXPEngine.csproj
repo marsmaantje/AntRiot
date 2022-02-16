@@ -95,6 +95,7 @@
     <Compile Include="Objects\CameraTrigger.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scene.cs" />
+    <Compile Include="Scripts\Music.cs" />
     <Compile Include="Scripts\Script.cs" />
     <Compile Include="Scripts\ControllerScript.cs" />
     <Compile Include="Scripts\TestScript.cs" />

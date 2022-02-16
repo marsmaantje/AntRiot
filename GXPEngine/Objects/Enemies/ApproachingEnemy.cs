@@ -17,7 +17,18 @@ namespace Objects.Enemies
         public new void Update()
         {
             base.Update();
-            Move(0, 30*Time.deltaTime / 1000f);
+
+            bool hitShield = false;
+            GameObject[] collisions = GetCollisions();
+            foreach (GameObject other in collisions)
+            {
+                if(other is ShieldSegment)
+                {
+                    hitShield = true;
+                }
+            }
+            if(!hitShield)
+                Move(0, 30*Time.deltaTime / 1000f);
         }
     }
 }

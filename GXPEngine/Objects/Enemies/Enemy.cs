@@ -60,7 +60,7 @@ namespace Objects.Enemies
                         break;
                 }
 
-                startDistance = 200;
+                startDistance = 350;
             }
             this.SetXY(0, -startDistance);
         }
