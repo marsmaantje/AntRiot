@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
+using Objects.Enemies;
 
 class Shield : Pivot
 {
@@ -17,7 +18,7 @@ class Shield : Pivot
     float shootSpeed = 0;
     int shootStartTime = 0;
     int nextShrink = 0;
-    AnimationSprite bullet = new AnimationSprite("sprites/shieldroll.png", 2, 1, 2, addCollider:true);
+    AnimationSprite bullet = new AnimationSprite("sprites/shieldroll.png", 2, 1, 2, addCollider: true);
 
     /// <summary>
     /// set and get the length of the shield
@@ -46,28 +47,57 @@ class Shield : Pivot
 
     public void Update()
     {
+        bullet.visible = false;
         //if we are currently doing the shooting animation
-        if(isShooting)
+        if (isShooting)
         {
             //filthy statemachine, but it works...
-            if(length > 0 && nextShrink < Time.time)
+            if (length > 0 && nextShrink < Time.time && !isReturning) //should remove two segemnts?
             {
                 nextShrink = Time.time + 200;
                 length -= (length % 2 == 0) ? 2 : 1;
             }
+            else if (length <= 0) //are we finished shrinking?
+            {
+                bullet.visible = true;
+                if (isReturning)
+                {
+                    bullet.Move(0, -shootSpeed * Time.deltaTime / 1000f);
+                    if (bullet.y <= distance)
+                    {
+                        length += 2;
+                        bullet.visible = false;
+                    }
+                }
+                else
+                {
+                    bullet.Move(0, shootSpeed * Time.deltaTime / 1000f);
+                    if (bullet.y > 350)
+                        isReturning = true;
+                }
+            }
+            else if (length > 0 && nextShrink < Time.time && isReturning) //are we expanding
+            {
+                bullet.visible = false;
+                nextShrink = Time.time + 200;
+                length += Math.Min(2, shieldLength - length);
+                if(length == shieldLength)
+                {
+                    isShooting = false;
+                }
+            }
             else
             {
                 bullet.SetXY(0, distance);
-                if(length <= 0)
+            }
+
+            //kill all enemies we are colliding with
+            GameObject[] collisions = bullet.GetCollisions();
+            foreach (GameObject other in collisions)
+            {
+                if(other is Enemy)
                 {
-                    if(isReturning)
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
+                    ((Enemy)other).kill();
                 }
             }
         }
@@ -82,6 +112,7 @@ class Shield : Pivot
     {
         this.shootSpeed = shootSpeed;
         isShooting = true;
+        isReturning = false;
         shieldLength = length;
         shootStartTime = Time.time;
     }
@@ -112,12 +143,12 @@ class Shield : Pivot
     void recalculateShield()
     {
         float arcLength = length * 16 + 68; //(magic values yay) total length the shield will have
-        float anglePerSegment = 90 - (Mathf.Atan((2*distance)/18) * radToDeg);
-        float specialAngle = 90 - (Mathf.Atan((2*distance)/20) * radToDeg);
+        float anglePerSegment = 90 - (Mathf.Atan((2 * distance) / 18) * radToDeg);
+        float specialAngle = 90 - (Mathf.Atan((2 * distance) / 20) * radToDeg);
         for (int i = 0; i < length; i++)
         {
             ShieldSegment segment = segments[i];
-            segment.SetXY(0,0);
+            segment.SetXY(0, 0);
             segment.SetOrigin(segment.width / 2, segment.height / 2);
 
             if (i == 0) //head
@@ -134,15 +165,15 @@ class Shield : Pivot
                 segment.Move(0, distance);
                 segment.rotation += 90;
                 segment.currentFrame = 4;
-                segment.SetCycle(4,2);
+                segment.SetCycle(4, 2);
             }
             else //body
             {
-                segment.rotation = (i - length/2)*anglePerSegment;
+                segment.rotation = (i - length / 2) * anglePerSegment;
                 segment.Move(0, distance);
                 segment.rotation += 90;
                 segment.currentFrame = 2;
-                segment.SetCycle(2,2);
+                segment.SetCycle(2, 2);
             }
         }
     }

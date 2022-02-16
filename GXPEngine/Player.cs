@@ -13,15 +13,14 @@ class Player : Pivot
 {
     //local variables
     private float rotationSmoothSpeed = 8;
-    private float shieldMovementSpeed = 5; //degrees per  second
     private int lives = 4; //amount of lives the player has before death
 
-    private bool defenderShooting = false;
     private float defenderShootSpeed = 300;
-    private float defenderShootTransitionTime = 500;
+    public int nextShieldBash = 0;
+    public int shieldCooldownPeriod = 5000;
 
-    private int specialCooldown = 8000;
-    private int prevSpecialTime = 0;
+    public int specialCooldown = 8000;
+    public int prevSpecialTime = 0;
     private bool specialFiring = false;
     private int specialDuration = 2000;
     private float specialRotationSpeed = 720;
@@ -190,7 +189,7 @@ class Player : Pivot
     private void defenderPlayerInput()
     {
         float rotationDelta = 0;
-        if(!defenderShooting)
+        if(!shield.isShooting)
             rotationDelta = shield.rotation - controller.defenderStickPosition;
 
         if (rotationDelta > 180)
@@ -200,6 +199,11 @@ class Player : Pivot
 
         shield.rotation -= rotationDelta * Time.deltaTime / 1000f * rotationSmoothSpeed;
         shield.rotation -= Mathf.Floor(shield.rotation / 360) * 360; //keep the rotation between 0 and 360, non negative
+
+        if(controller.defenderButtonDown && !shield.isShooting && Time.time > nextShieldBash)
+        {
+            shield.fire(defenderShootSpeed);
+        }
 
     }
 

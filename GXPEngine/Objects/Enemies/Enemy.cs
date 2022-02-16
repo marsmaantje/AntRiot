@@ -43,23 +43,6 @@ namespace Objects.Enemies
             float globalScale = TransformDirection(1, 0).length();
             if (startDistance < 0)
             {
-                //calculate
-                switch(Mathf.Floor(angle/90f))
-                {
-                    case 0:
-                        startDistance = angle == 0 ? globalPosition.y: Mathf.Min(globalPosition.y / Mathf.Cos(angle * degToRad), globalPosition.x / Mathf.Cos((90 - angle) * degToRad));
-                        break;
-
-                    case 1:
-                        break;
-
-                    case 2:
-                        break;
-
-                    case 3:
-                        break;
-                }
-
                 startDistance = 350;
             }
             this.SetXY(0, -startDistance);
