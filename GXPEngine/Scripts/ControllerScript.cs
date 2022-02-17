@@ -119,8 +119,7 @@ namespace Scripts
                     Globals.controller = new SerialPort(ports[ports.Length - 1]);
                     Globals.controller.Open();
                 }
-                catch (Exception e)
-                { }
+                catch { }
             }
         }
 

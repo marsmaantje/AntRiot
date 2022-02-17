@@ -82,6 +82,14 @@ namespace Objects.Enemies
             pivot.LateDestroy();
         }
 
+        /// <summary>
+        /// Optional if the enemy takes damage instead of immediately dying
+        /// </summary>
+        public virtual void damage()
+        {
+            kill();
+        }
+
         public Pivot getPivot() => pivot;
 
         /// <summary>

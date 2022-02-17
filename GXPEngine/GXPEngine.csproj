@@ -87,6 +87,7 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Objects\CustomObject.cs" />
+    <Compile Include="Objects\Enemies\FlyingEnemy.cs" />
     <Compile Include="Objects\Enemies\ShootingEnemy.cs" />
     <Compile Include="Objects\Enemies\ApproachingEnemy.cs" />
     <Compile Include="Objects\Enemies\Enemy.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Scripts\Music.cs" />
     <Compile Include="Scripts\Script.cs" />
     <Compile Include="Scripts\ControllerScript.cs" />
+    <Compile Include="Scripts\SpawnerScript.cs" />
     <Compile Include="Scripts\TestScript.cs" />
     <Compile Include="Shield.cs" />
     <Compile Include="UI.cs" />

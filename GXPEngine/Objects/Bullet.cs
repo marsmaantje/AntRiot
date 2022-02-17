@@ -56,7 +56,7 @@ namespace Objects
             {
                 if(other is Enemy)
                 {
-                    ((Enemy)other).kill();
+                    ((Enemy)other).damage();
                     LateDestroy();
                 }
             }

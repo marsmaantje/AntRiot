@@ -9,11 +9,11 @@ namespace Objects.Enemies
     class ShootingEnemy : Enemy
     {
         int nextShotTime = 0; //time at wich the next shot will be fired
-        const int shootInterval = 1500; //minimum interval between shots
+        const int shootInterval = 5000; //minimum interval between shots
         const int shootIntervalRandomness = 800; //randomness of shotInterval
-        int circleDistance = 130; //distance at wich the buf starts circling the player and shooting
+        int circleDistance = 200; //distance at wich the buf starts circling the player and shooting
         bool finalApproach = false;
-        int ammo = 5;
+        int ammo = 5000;
         Random ran = new Random();
 
         public ShootingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
@@ -33,15 +33,18 @@ namespace Objects.Enemies
                     nextShotTime = Time.time + shootInterval + ran.Next(0, shootIntervalRandomness);
                 }
             }
-            else //if too far, move closer
+            else //if too far or on final approach, move closer
             {
-                Move(0, 30*Time.deltaTime / 1000f);
+                Move(0, 15*Time.deltaTime / 1000f);
             }
         }
 
+        /// <summary>
+        /// Fire a bullet
+        /// </summary>
         void shoot()
         {
-            Shot bullet = new Shot("sprites/enemies.png", 4, 2, 4, pivot.rotation, -y, 25, 2);
+            Shot bullet = new Shot("sprites/enemies.png", 4, 2, 4, pivot.rotation, -y, 0, 2);
             parentScene.AddChild(bullet);
             bullet.initialize(parentScene);
             ammo--;

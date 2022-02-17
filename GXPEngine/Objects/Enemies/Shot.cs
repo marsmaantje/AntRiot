@@ -13,7 +13,7 @@ namespace Objects.Enemies
 
         }
 
-        public void Update()
+        public new void Update()
         {
             base.Update();
             GameObject[] collisions = GetCollisions();
