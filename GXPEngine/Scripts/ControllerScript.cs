@@ -12,22 +12,20 @@ namespace Scripts
     class ControllerScript : Script
     {
 
-        //public variables
+        //variables
         public int shooterStickPosition = 0;
+        float shooterStickPositionDesktopOffset = 0;
         public bool shootButtonDown = false;
         public bool shootSpecialDown = false;
-        public int defenderStickPosition = 0;
-        public bool defenderButtonDown = false;
-        public bool defenderSpecialDown = false;
-        public bool bothSpecialDown = false;
-
-        //local variables
         public bool prevShootButton = false;
         public bool prevShootSpecial = false;
+
+        public int defenderStickPosition = 0;
+        float defenderStickPositionDesktopOffset = 0;
+        public bool defenderButtonDown = false;
+        public bool defenderSpecialDown = false;
         public bool prevDefenderButton = false;
         public bool prevDefenderSpecial = false;
-
-        int lastSpecialPress = 0;
 
         int lastMessageTime = 0;
         const int timeout = 2000;
@@ -93,17 +91,23 @@ namespace Scripts
                 lastMessageTime = Time.time;
             }
 
-            shootButtonDown = !prevShootButton && shooterButton;
-            shootSpecialDown = !prevShootSpecial && shooterSpecial;
-            prevShootButton = shooterButton;
-            prevShootSpecial = shooterSpecial;
-            shooterStickPosition = shooterPinReading;
+            shooterStickPositionDesktopOffset += (((Input.GetKey(Key.LEFT) ? -1 : 0) + (Input.GetKey(Key.RIGHT) ? 1 : 0)) * 360 * Time.deltaTime / 1000f);
+            shooterStickPositionDesktopOffset %= 360;
 
-            defenderButtonDown = !prevDefenderButton && defenderButton;
-            defenderSpecialDown = !prevDefenderSpecial && defenderSpecial;
-            prevDefenderButton = defenderButton;
-            prevDefenderSpecial = defenderSpecial;
-            defenderStickPosition = defenderPinReading;
+            defenderStickPositionDesktopOffset += (((Input.GetKey(Key.A) ? -1 : 0) + (Input.GetKey(Key.D) ? 1 : 0)) * 360 * Time.deltaTime / 1000f);
+            defenderStickPositionDesktopOffset %= 360;
+
+            shootButtonDown = (!prevShootButton && shooterButton) || Input.GetKeyDown(Key.UP);
+            shootSpecialDown = (!prevShootSpecial && shooterSpecial) || Input.GetKeyDown(Key.RIGHT_CTRL);
+            prevShootButton = shooterButton || Input.GetKey(Key.UP);
+            prevShootSpecial = shooterSpecial || Input.GetKey(Key.RIGHT_CTRL);
+            shooterStickPosition = shooterPinReading + (int)shooterStickPositionDesktopOffset;
+
+            defenderButtonDown = (!prevDefenderButton && defenderButton) || Input.GetKeyDown(Key.W);
+            defenderSpecialDown = (!prevDefenderSpecial && defenderSpecial) || Input.GetKeyDown(Key.LEFT_CTRL);
+            prevDefenderButton = defenderButton || Input.GetKey(Key.W);
+            prevDefenderSpecial = defenderSpecial || Input.GetKey(Key.LEFT_CTRL);
+            defenderStickPosition = defenderPinReading + (int)defenderStickPositionDesktopOffset;
 
         }
 
