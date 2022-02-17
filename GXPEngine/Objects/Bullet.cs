@@ -54,7 +54,7 @@ namespace Objects
             GameObject[] objects = GetCollisions();
             foreach (GameObject other in objects)
             {
-                if(other is Enemy)
+                if(other is Enemy && !(other is Shot))
                 {
                     ((Enemy)other).damage();
                     LateDestroy();

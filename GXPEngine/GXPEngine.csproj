@@ -101,6 +101,7 @@
     <Compile Include="Scripts\Script.cs" />
     <Compile Include="Scripts\ControllerScript.cs" />
     <Compile Include="Scripts\SpawnerScript.cs" />
+    <Compile Include="Scripts\HighScoreDisplayCreatorScript.cs" />
     <Compile Include="Scripts\TestScript.cs" />
     <Compile Include="Shield.cs" />
     <Compile Include="UI.cs" />
@@ -108,7 +109,9 @@
     <Compile Include="UIElements\ExitButton.cs" />
     <Compile Include="UIElements\LivesCounter.cs" />
     <Compile Include="UIElements\PlayButton.cs" />
+    <Compile Include="UIElements\RechargeIndicator.cs" />
     <Compile Include="UIElements\ScoreDisplay.cs" />
+    <Compile Include="UIElements\HighScoreDisplay.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

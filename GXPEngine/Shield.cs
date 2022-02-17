@@ -26,7 +26,7 @@ class Shield : Pivot
     public int length
     {
         get => segments.Count;
-        set => setShieldSize((int)Mathf.Max(value, 2));
+        set => setShieldSize(value);
     }
 
     public Shield(string filename)
@@ -41,6 +41,7 @@ class Shield : Pivot
         bullet = new AnimationSprite("sprites/shieldroll.png", 2, 1, 2, addCollider: true);
         bullet.visible = false;
         AddChild(bullet);
+        bullet.SetOrigin(bullet.width / 2, bullet.height / 2);
         bullet.SetXY(0, distance);
         SetXY(0, 0);
     }
@@ -90,6 +91,8 @@ class Shield : Pivot
             {
                 bullet.SetXY(0, distance);
             }
+
+            bullet.Animate(Globals.animationFramerate * Time.deltaTime / 1000f);
 
             //kill all enemies we are colliding with
             GameObject[] collisions = bullet.GetCollisions();

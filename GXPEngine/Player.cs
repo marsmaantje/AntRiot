@@ -33,6 +33,10 @@ class Player : Pivot
     public Shield shield;
     LivesCounter livesCounter;
     ScoreDisplay scoreDisplay;
+    RechargeIndicator shieldRecharge;
+    RechargeIndicator specialRecharge;
+    AnimationSprite specialAnimation;
+
 
     //camera target when following the player
     public Pivot cameraTarget;
@@ -79,6 +83,17 @@ class Player : Pivot
         controller.initialize(parentScene);
         AddChild(controller);
 
+        //find the recharge and health UIElements
+        RechargeIndicator[] indicators = parentScene.FindObjectsOfType<RechargeIndicator>();
+        foreach (RechargeIndicator indicator in indicators)
+        {
+            Console.WriteLine(indicator.obj.Name);
+            if (indicator.obj.Name == "pillBug") 
+                shieldRecharge = indicator;
+            if (indicator.obj.Name == "special")
+                specialRecharge = indicator;
+        }
+
         this.parentScene = parentScene;
 
         //create the players
@@ -110,6 +125,11 @@ class Player : Pivot
         parentScene.ui.addElement(scoreDisplay, "scoreDisplay", game.width - 100, game.height - 60);
         scoreDisplay.setText(""+Globals.score);
 
+        //setup the specialAnimation
+        specialAnimation = new AnimationSprite("sprites/queen.png", 8, 2, addCollider: false);
+        AddChild(specialAnimation);
+        specialAnimation.SetOrigin(specialAnimation.width / 2, specialAnimation.height);
+        specialAnimation.SetXY(0, 20);
     }
 
     /// <summary>
@@ -120,7 +140,7 @@ class Player : Pivot
 
     }
 
-    void Update()
+    public void Update()
     {
         shooterPlayerInput();
         defenderPlayerInput();
@@ -151,9 +171,12 @@ class Player : Pivot
     {
         int frame = shooterAnimation.currentFrame;
         if(shooterAnimation.currentFrame != 0)
-            shooterAnimation.Animate(Globals.animationFramerate/2 * Time.deltaTime / 1000f);
+            shooterAnimation.Animate(Globals.animationFramerate * Time.deltaTime / 1000f);
         if (shooterAnimation.currentFrame == 6 && shooterAnimation.currentFrame != frame)
             fire();
+        if (specialFiring)
+            specialAnimation.currentFrame = (int)Mathf.Min(specialAnimation.frameCount, Mathf.Max(0,
+                Globals.map(Time.time, prevSpecialTime, prevSpecialTime + specialDuration, 0, specialAnimation.frameCount)));
     }
 
     private void shooterPlayerInput()
@@ -203,6 +226,7 @@ class Player : Pivot
         if(controller.defenderButtonDown && !shield.isShooting && Time.time > nextShieldBash)
         {
             shield.fire(defenderShootSpeed);
+            nextShieldBash = Time.time + shieldCooldownPeriod;
         }
 
     }
@@ -232,6 +256,7 @@ class Player : Pivot
             bullet.SetXY(this.x, this.y);
             bullet.rotation = rotation < 0 ? shooterAnimation.rotation : rotation;
             bullet.initialize(parentScene);
+            bullet.Move(0, 30);
     }
 
     /// <summary>
@@ -240,6 +265,10 @@ class Player : Pivot
     private void updateUI()
     {
         scoreDisplay.setText("" + Globals.score);
+        if (shieldRecharge != null)
+            shieldRecharge.progress = (Mathf.Min(1, Mathf.Max(0, Globals.map(Time.time, nextShieldBash - shieldCooldownPeriod, nextShieldBash, 0, 1))));
+        if (specialRecharge != null)
+            specialRecharge.progress = (Mathf.Min(1, Mathf.Max(0, Globals.map(Time.time, prevSpecialTime, prevSpecialTime + specialCooldown, 0, 1))));
     }
 
     public void takeDamage(int damage = 1)
@@ -254,6 +283,8 @@ class Player : Pivot
     /// </summary>
     public void die()
     {
+        Globals.highScore = Math.Max(Globals.score, Globals.highScore);
+        Globals.score = 0;
         ((MyGame)game).loadNewLevel("maps/Main menu.tmx");
     }
 }

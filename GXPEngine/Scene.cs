@@ -131,6 +131,10 @@ class Scene : Pivot
             {
                 ((CustomObject)child).initialize(this);
             }
+            if (child is Player)
+            {
+                ((Player)child).initialize(this);
+            }
         }
 
         if (FindObjectOfType<Player>() != null)
@@ -179,7 +183,6 @@ class Scene : Pivot
             player = new Player(obj);
             AddChild(player);
             player.SetXY(obj.X, obj.Y);
-            player.initialize(this);
         }
     }
 }

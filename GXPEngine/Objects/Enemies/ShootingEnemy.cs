@@ -13,7 +13,7 @@ namespace Objects.Enemies
         const int shootIntervalRandomness = 800; //randomness of shotInterval
         int circleDistance = 200; //distance at wich the buf starts circling the player and shooting
         bool finalApproach = false;
-        int ammo = 5000;
+        int ammo = 500000;
         Random ran = new Random();
 
         public ShootingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
@@ -44,7 +44,7 @@ namespace Objects.Enemies
         /// </summary>
         void shoot()
         {
-            Shot bullet = new Shot("sprites/enemies.png", 4, 2, 4, pivot.rotation, -y, 0, 2);
+            Shot bullet = new Shot("sprites/shot.png", 1, 1, 4, pivot.rotation, -y, 0, 1);
             parentScene.AddChild(bullet);
             bullet.initialize(parentScene);
             ammo--;

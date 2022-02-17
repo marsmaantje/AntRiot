@@ -22,7 +22,7 @@ namespace Scripts
 
             this.filename = obj.GetStringProperty("songName");
 
-            Console.WriteLine("trying to play song");
+            Console.WriteLine("trying to play song" + this.filename);
             song = new Sound(this.filename, true, false);
 
             musicChannel = song.Play();

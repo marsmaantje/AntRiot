@@ -13,9 +13,9 @@ namespace Scripts
     class SpawnerScript : Script
     {
         int lastSpawnTime = 0;
-        const int spawnInterval = 1500;
+        int spawnInterval = 1500;
         Random rand = new Random();
-        int waveInterval = 5000;
+        int waveInterval = 30000;
         int startTime = 0;
         int waves = 2;
 
@@ -41,15 +41,40 @@ namespace Scripts
                 switch (currentWave)
                 {
                     case 0: //wave 0
-                        Console.WriteLine("wave 0");
+
+                        Console.WriteLine("wave 1");
+                        spawnBeetle();
                         break;
 
                     case 1: //wave 1
-                        Console.WriteLine("wave 1");
+                        Console.WriteLine("wave 2");
+                        switch (rand.Next(0,2))
+                        {
+                            case 0:
+                                spawnBeetle();
+                                break;
+                            case 1:
+                                spawnYellowBug();
+                                break;
+                        }
+                        spawnInterval = 1200;
                         break;
 
                     case 2: //wave 2
-                        Console.WriteLine("wave 2");
+                        Console.WriteLine("wave 3");
+                        switch (rand.Next(0, 2))
+                        {
+                            case 0:
+                                spawnBeetle();
+                                break;
+                            case 1:
+                                spawnLadyBug();
+                                break;
+                            case 2:
+                                spawnYellowBug();
+                                break;
+                        }
+                        spawnInterval = 1000;
                         break;
                 }
 
@@ -58,14 +83,14 @@ namespace Scripts
             if ((Time.time / 300) % 2 == 0
                 && startTime + (currentWave * waveInterval) + 3000 > Time.time)
             {
-                parentScene.ui.showText("Wave " + currentWave, 1);
+                parentScene.ui.showText("Wave " + (currentWave + 1), 1);
             }
         }
 
         void spawnBeetle()
         {
             float angle = (float)(rand.Next(0, 20) * 18);
-            Enemy enemy = new ApproachingEnemy("sprites/enemies.png", 4, 2, 6, angle, -1, 25, 2, 1);
+            Enemy enemy = new ApproachingEnemy("sprites/enemy.png", 4, 1, 0, angle, -1, 25, 4, 1);
             parentScene.AddChild(enemy);
             enemy.initialize(parentScene);
         }
@@ -73,7 +98,7 @@ namespace Scripts
         void spawnLadyBug()
         {
             float angle = (float)(rand.Next(0, 20) * 18);
-            Enemy enemy = new ApproachingEnemy("sprites/enemies.png", 4, 2, 6, angle, -1, 25, 2, 2);
+            Enemy enemy = new ApproachingEnemy("sprites/enemies.png", 4, 2, 0, angle, -1, 25, 4, 2);
             parentScene.AddChild(enemy);
             enemy.initialize(parentScene);
         }
@@ -81,7 +106,7 @@ namespace Scripts
         void spawnYellowBug()
         {
             float angle = (float)(rand.Next(0, 20) * 18);
-            Enemy enemy = new ShootingEnemy("sprites/enemies.png", 4, 2, 0, angle, -1, 25, 4);
+            Enemy enemy = new ShootingEnemy("sprites/enemies2.png", 4, 2, 0, angle, -1, 25, 4);
             parentScene.AddChild(enemy);
             enemy.initialize(parentScene);
         }
@@ -89,7 +114,7 @@ namespace Scripts
         void spawnGreenBug()
         {
             float angle = (float)(rand.Next(0, 20) * 18);
-            Enemy enemy = new FlyingEnemy("sprites/enemies.png", 4, 2, 0, angle, -1, 25, 4);
+            Enemy enemy = new FlyingEnemy("sprites/enemies.png", 4, 2, 6, angle, -1, 25, 2);
             parentScene.AddChild(enemy);
             enemy.initialize(parentScene);
         }
