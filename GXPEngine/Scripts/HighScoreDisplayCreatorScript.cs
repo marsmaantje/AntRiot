@@ -12,11 +12,6 @@ namespace Scripts
 {
     class HighScoreDisplayCreatorScript : Script
     {
-        int lastSpawnTime = 0;
-        const int spawnInterval = 1500;
-        Random rand = new Random();
-        int lastSpawn = 0;
-
         public HighScoreDisplayCreatorScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
 
@@ -29,7 +24,7 @@ namespace Scripts
             parentScene.AddChild(display);
             display.TextAlign(CenterMode.Center, CenterMode.Min);
             display.TextSize(12);
-            display.SetXY(20, game.height - 20);
+            display.SetXY(game.width/2 - 60 , game.height - 70);
         }
     }
 }

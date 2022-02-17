@@ -9,9 +9,12 @@ namespace Objects.Enemies
     class ApproachingEnemy : Enemy
     {
         int health = 1;
-        public ApproachingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1, int health = 1) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
+        float speed = 30;
+
+        public ApproachingEnemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1, int health = 1, float speed = 30) : base(filename, cols, rows, startFrame, angle, distance, score, animationFrames)
         {
             this.health = health;
+            this.speed = speed;
         }
 
         public new void Update()
@@ -25,11 +28,11 @@ namespace Objects.Enemies
                 if(other is ShieldSegment)
                 {
                     hitShield = true;
-                    Move(0, -30 * Time.deltaTime / 1000f);
+                    Move(0, -speed * Time.deltaTime / 1000f);
                 }
             }
             if(!hitShield)
-                Move(0, 30*Time.deltaTime / 1000f);
+                Move(0, speed*Time.deltaTime / 1000f);
         }
 
         public override void damage()

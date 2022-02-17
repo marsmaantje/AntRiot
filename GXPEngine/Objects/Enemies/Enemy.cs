@@ -15,15 +15,19 @@ namespace Objects.Enemies
         float startDistance;
         int score;
         int animationFrames = 1;
-        Sound death = new Sound("sounds/splat.wav");
+        bool killOnImpact = true;
+        bool hasDamagedPlayer = false;
+        Random ran = new Random();
+        Sound death = new Sound("sounds/Splat.wav");
 
-        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(null, filename, cols, rows)
+        public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1, bool killOnImpact = true) : base(null, filename, cols, rows)
         {
             currentFrame = startFrame;
             this.angle = angle;
             startDistance = distance;
             this.score = score;
             this.animationFrames = animationFrames;
+            this.killOnImpact = killOnImpact;
             SetCycle(startFrame, animationFrames);
         }
 
@@ -53,10 +57,18 @@ namespace Objects.Enemies
         {
             Animate(Globals.animationFramerate * Time.deltaTime / 1000f);
             GameObject[] hits = GetCollisions();
-            if (y >= -this.height)
+            if( y>= -this.height && !hasDamagedPlayer)
             {
                 parentScene.player.takeDamage();
-                kill();
+                hasDamagedPlayer = true;
+                if (killOnImpact)
+                    kill();
+            }
+
+            if (y >= startDistance)
+            {
+                LateDestroy();
+                pivot.LateDestroy();
             }
         }
 
@@ -83,7 +95,7 @@ namespace Objects.Enemies
             pivot.LateDestroy();
 
             //play death audio
-            this.death.Play();
+            this.death.Play().Frequency = ran.Next(38000, 48000);
 
             //spawn death effect
             DeathEffect death = new DeathEffect("sprites/splat.png", 4, 2);

@@ -17,7 +17,7 @@ namespace Scripts
         Random rand = new Random();
         int waveInterval = 30000;
         int startTime = 0;
-        int waves = 3;
+        int waves = 4;
 
         public SpawnerScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
@@ -96,6 +96,29 @@ namespace Scripts
                         }
                         spawnInterval = 900;
                         break;
+
+                    case 4:
+                        Console.WriteLine("wave 5");
+                        switch (rand.Next(0, 5))
+                        {
+                            case 0:
+                                spawnBeetle();
+                                break;
+                            case 1:
+                                spawnLadyBug();
+                                break;
+                            case 2:
+                                spawnYellowBug();
+                                break;
+                            case 3:
+                                spawnGreenBug();
+                                break;
+                            case 4:
+                                spawnWasp();
+                                break;
+                        }
+                        spawnInterval = 500;
+                        break;
                 }
 
             }
@@ -105,6 +128,9 @@ namespace Scripts
             {
                 parentScene.ui.showText("Wave " + (currentWave + 1), 1);
             }
+
+            if (currentWave == waves && startTime + (currentWave * waveInterval) + 3000 > Time.time)
+                parentScene.ui.showText("Final Wave!", 2);
         }
 
         void spawnBeetle()
@@ -135,6 +161,14 @@ namespace Scripts
         {
             float angle = (float)(rand.Next(0, 20) * 18);
             Enemy enemy = new FlyingEnemy("sprites/enemies.png", 4, 2, 6, angle, -1, 25, 2);
+            parentScene.AddChild(enemy);
+            enemy.initialize(parentScene);
+        }
+
+        void spawnWasp()
+        {
+            float angle = (float)(rand.Next(0, 20) * 18);
+            Enemy enemy = new FlyingEnemy("sprites/enemies.png", 4, 2, 4, angle, -1, 25, 2, killOnImpact:false, speed:60);
             parentScene.AddChild(enemy);
             enemy.initialize(parentScene);
         }

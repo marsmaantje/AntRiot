@@ -19,7 +19,7 @@ class Player : Pivot
     public int nextShieldBash = 0;
     public int shieldCooldownPeriod = 5000;
 
-    public int specialCooldown = 8000;
+    public int specialCooldown = 20000;
     public int prevSpecialTime = 0;
     private bool specialFiring = false;
     private int specialDuration = 2000;
