@@ -26,7 +26,7 @@ class Shield : Pivot
     public int length
     {
         get => segments.Count;
-        set => setShieldSize(value);
+        set => setShieldSize(Math.Max(value, 0));
     }
 
     public Shield(string filename)

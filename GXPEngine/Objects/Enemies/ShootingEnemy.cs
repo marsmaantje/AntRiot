@@ -44,7 +44,7 @@ namespace Objects.Enemies
         /// </summary>
         void shoot()
         {
-            Shot bullet = new Shot("sprites/shot.png", 4, 1, 4, pivot.rotation, -y, 0, animationFrames:4, speed:60);
+            Shot bullet = new Shot("sprites/shot.png", 4, 1, 0, pivot.rotation, -y, 0, animationFrames:4, speed:60);
             parentScene.AddChild(bullet);
             bullet.initialize(parentScene);
             ammo--;
