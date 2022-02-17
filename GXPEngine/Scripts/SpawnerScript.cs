@@ -17,7 +17,7 @@ namespace Scripts
         Random rand = new Random();
         int waveInterval = 30000;
         int startTime = 0;
-        int waves = 2;
+        int waves = 3;
 
         public SpawnerScript(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj)
         {
@@ -62,7 +62,7 @@ namespace Scripts
 
                     case 2: //wave 2
                         Console.WriteLine("wave 3");
-                        switch (rand.Next(0, 2))
+                        switch (rand.Next(0, 3))
                         {
                             case 0:
                                 spawnBeetle();
@@ -75,6 +75,26 @@ namespace Scripts
                                 break;
                         }
                         spawnInterval = 1000;
+                        break;
+
+                    case 3:
+                        Console.WriteLine("wave 4");
+                        switch (rand.Next(0, 4))
+                        {
+                            case 0:
+                                spawnBeetle();
+                                break;
+                            case 1:
+                                spawnLadyBug();
+                                break;
+                            case 2:
+                                spawnYellowBug();
+                                break;
+                            case 3:
+                                spawnGreenBug();
+                                break;
+                        }
+                        spawnInterval = 900;
                         break;
                 }
 

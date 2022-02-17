@@ -15,6 +15,7 @@ namespace Objects.Enemies
         float startDistance;
         int score;
         int animationFrames = 1;
+        Sound death = new Sound("sounds/splat.wav");
 
         public Enemy(string filename, int cols, int rows, int startFrame, float angle, float distance = -1, int score = 0, int animationFrames = 1) : base(null, filename, cols, rows)
         {
@@ -80,6 +81,17 @@ namespace Objects.Enemies
             Globals.score += score;
             this.LateDestroy();
             pivot.LateDestroy();
+
+            //play death audio
+            this.death.Play();
+
+            //spawn death effect
+            DeathEffect death = new DeathEffect("sprites/splat.png", 4, 2);
+            parentScene.AddChild(death);
+            Vector2 globalPosition = TransformPoint(0, 0);
+            Vector2 scenePosition = parentScene.InverseTransformPoint(globalPosition.x, globalPosition.y);
+            death.SetOrigin(death.width / 2, death.height / 2);
+            death.SetXY(scenePosition.x, scenePosition.y);
         }
 
         /// <summary>

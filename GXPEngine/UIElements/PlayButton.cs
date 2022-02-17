@@ -13,6 +13,7 @@ namespace UIElements
         /// fileNmae of the map this button should load when pressed
         /// </summary>
         string mapName;
+        Sound transition = new Sound("sounds/StartingGame.wav");
 
         public PlayButton(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows, obj) { }
 
@@ -25,6 +26,7 @@ namespace UIElements
 
         protected override void OnClicked()
         {
+            transition.Play();
             ((MyGame)game).loadNewLevel(mapName);
         }
 

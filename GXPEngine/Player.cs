@@ -36,6 +36,13 @@ class Player : Pivot
     RechargeIndicator shieldRecharge;
     RechargeIndicator specialRecharge;
     AnimationSprite specialAnimation;
+    Random ran = new Random();
+
+    //Sounds
+    Sound damage = new Sound("sounds/Damage.wav");
+    Sound shoot = new Sound("sounds/SlingShot.wav");
+    Sound special = new Sound("sounds/Queen Scream + PowerUp.wav");
+
 
 
     //camera target when following the player
@@ -121,7 +128,7 @@ class Player : Pivot
         //setup the score Display
         scoreDisplay = new ScoreDisplay(95, 55);
         scoreDisplay.TextAlign(CenterMode.Center, CenterMode.Min);
-        scoreDisplay.TextSize(27);
+        scoreDisplay.TextSize(24);
         parentScene.ui.addElement(scoreDisplay, "scoreDisplay", game.width - 100, game.height - 60);
         scoreDisplay.setText(""+Globals.score);
 
@@ -173,7 +180,10 @@ class Player : Pivot
         if(shooterAnimation.currentFrame != 0)
             shooterAnimation.Animate(Globals.animationFramerate * Time.deltaTime / 1000f);
         if (shooterAnimation.currentFrame == 6 && shooterAnimation.currentFrame != frame)
+        {
             fire();
+            shoot.Play().Frequency = ran.Next(38000, 48000);
+        }
         if (specialFiring)
             specialAnimation.currentFrame = (int)Mathf.Min(specialAnimation.frameCount, Mathf.Max(0,
                 Globals.map(Time.time, prevSpecialTime, prevSpecialTime + specialDuration, 0, specialAnimation.frameCount)));
@@ -201,6 +211,7 @@ class Player : Pivot
         if((controller.prevDefenderSpecial && controller.prevShootSpecial && (controller.defenderSpecialDown || controller.shootSpecialDown))
             && Time.time > prevSpecialTime + specialCooldown)
         {
+            special.Play();
             specialFiring = true;
             prevSpecialTime = Time.time;
         }
@@ -273,6 +284,7 @@ class Player : Pivot
 
     public void takeDamage(int damage = 1)
     {
+        this.damage.Play().Frequency = ran.Next(38000, 48000);
         lives -= damage;
         if (lives <= 0)
             die();

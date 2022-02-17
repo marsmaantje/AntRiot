@@ -87,6 +87,7 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Objects\CustomObject.cs" />
+    <Compile Include="Objects\DeathEffect.cs" />
     <Compile Include="Objects\Enemies\FlyingEnemy.cs" />
     <Compile Include="Objects\Enemies\ShootingEnemy.cs" />
     <Compile Include="Objects\Enemies\ApproachingEnemy.cs" />
